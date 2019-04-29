@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import { Card, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import Checkbox from 'material-ui/Checkbox';
 
 
 const SignUpForm = (props) => (
@@ -15,21 +16,41 @@ const SignUpForm = (props) => (
 
       <div className="field-line">
         <TextField
-          floatingLabelText="Name"
-          name="name"
-          errorText={props.errors.name ? (props.errors.name) : ("")}
+          floatingLabelText="Username"
+          name="username"
+		      errorText={props.errors.username ?(props.errors.username):("")}
           onChange={props.onChange}
-          value={props.name}
+          value={props.username}
         />
       </div>
 
       <div className="field-line">
         <TextField
-          floatingLabelText="Email"
-          name="email"
-          errorText={props.errors.email ?(props.errors.email):("")}
+          floatingLabelText="First Name"
+          name="firstname"
           onChange={props.onChange}
-          value={props.email}
+          errorText={props.errors.firstname ?(props.errors.firstname) :("")}
+          value={props.firstname}
+        />
+      </div>
+
+      <div className="field-line">
+        <TextField
+          floatingLabelText="Last Name"
+          name="lastname"
+          onChange={props.onChange}
+          errorText={props.errors.lastname ?(props.errors.lastname) :("")}
+          value={props.lastname}
+        />
+      </div>
+
+      <div className="field-line">
+        <TextField
+          floatingLabelText="City"
+          name="city"
+          onChange={props.onChange}
+          errorText={props.errors.city ?(props.errors.city) :("")}
+          value={props.city}
         />
       </div>
 
@@ -44,6 +65,26 @@ const SignUpForm = (props) => (
         />
       </div>
 
+      <div className="field-line">
+        <TextField
+          floatingLabelText="Research Interest"
+          name="interest"
+          onChange={props.onChange}
+          errorText={props.errors.interest ?(props.errors.interest) :("")}
+          value={props.interest}
+        />
+      </div>
+
+      <div>
+          <Checkbox
+              name="privacy"
+              checked={props.privacy}
+              onCheck={props.onChange}
+              label="privacy"
+        />
+      </div>
+
+
       <div className="button-line">
         <RaisedButton type="submit" label="Create New Account" primary />
       </div>
@@ -54,12 +95,16 @@ const SignUpForm = (props) => (
 );
 
 SignUpForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-  errors: PropTypes.object.isRequired,
-  email: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+	onSubmit: PropTypes.func.isRequired,
+	onChange: PropTypes.func.isRequired,
+	errors: PropTypes.object.isRequired,
+	firstname:PropTypes.object.isRequired,
+	lastname:PropTypes.object.isRequired,
+	password:PropTypes.object.isRequired,
+	birthday:PropTypes.object.isRequired,
+	username:PropTypes.object.isRequired,
+	city: PropTypes.object.isRequired,
+	privacy: PropTypes.object.isRequired,
 };
 
 export default SignUpForm;

@@ -2,9 +2,13 @@
 const initialState = {
   registering: false,
   registered: false,
-  name:"",
-  email: '',
-  password: '',
+  username:"",
+  firstname:"",
+  lastname:"",
+  birthday:"",
+  password:"",
+  privacy: false,
+  interest:"",
   errors:{},
   successMessage:"",
   errorMessage:"",
@@ -26,16 +30,20 @@ export function registration(state = initialState, action) {
     case "USERS_REGISTER_FULFILLED":
 
       return {
-        ...state,
-        registering: false,
-        registered: true,
-        successMessage: action.payload.data.message,
-        errors:{},
-        name:"",
-        email: "",
-        password: "",
-        errorMessage:""
-      };
+		...state,
+  		registering: false,
+  		registered: true,
+  		successMessage: action.payload.data.message,
+  		errors:{},
+  		username:"",
+  		firstname:"",
+  		lastname:"",
+  		birthday:"",
+  		password:"",
+      interest:"",
+  		privacy: false,
+      errorMessage:""
+    };
     case "USERS_REGISTER_REJECTED":
       return {
         ...state,

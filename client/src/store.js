@@ -15,6 +15,6 @@ export const store = createStore(
         middleware,
         thunkMiddleware,
         loggerMiddleware,
-        promiseMiddleware(),
+        promiseMiddleware,
     )
 );

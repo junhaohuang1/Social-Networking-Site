@@ -32,10 +32,15 @@ class SignUpPage extends React.Component {
     const firstname = this.props.firstname;
     const lastname = this.props.lastname;
     const password = this.props.password;
-    if (username && firstname && lastname && password) {
-        this.props.signup(username,firstname,lastname,password);
+    const birthday = this.props.birthday;
+    const privacy = this.props.privacy;
+    const city = this.props.city;
+    const interest = this.props.interest;
+    if (username && firstname && lastname && password && birthday && privacy && city && interest) {
+        this.props.signup(username,firstname,lastname,password, birthday, privacy, city, interest);
     }
   }
+
 
   /**
    * Change the user object.
@@ -58,13 +63,17 @@ class SignUpPage extends React.Component {
       // }
       return (
         <SignUpForm
-          test={this.test}
           onSubmit={this.processForm}
           onChange={this.changeUser}
           errors={this.props.errors}
-          email={this.props.email}
+          firstname={this.props.firstname}
+          lastname={this.props.lastname}
           password={this.props.password}
-          name={this.props.name}
+          birthday={this.props.birthday}
+          username={this.props.name}
+          city = {this.props.city}
+          interest = {this.props.interest}
+          privacy={this.props.privacy}
         />
       );
   }
@@ -76,9 +85,14 @@ function mapStateToProps(state) {
     registered: state.registration.registered,
     errors: state.registration.errors,
     successMessage: state.registration.successMessage,
-    email: state.registration.email,
     password: state.registration.password,
-    name: state.registration.name,
+    firstname: state.registration.firstname,
+    lastname: state.registration.lastname,
+    birthday: state.registration.birthday,
+    username: state.registration.username,
+    interest: state.registration.interest,
+    privacy: state.registration.privacy,
+    city:  state.registration.city,
     errorMessage: state.registration.errorMessage
   }
 }
@@ -86,8 +100,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => {
   return {
-    signup: (name,email,password) => {
-      dispatch(userActions.signup(name, email,password))
+    signup: (username, firstname, lastname, city, password, birthday, interest, privacy) => {
+      dispatch(userActions.signup(username, firstname, lastname, city, password, birthday, interest, privacy))
     },
     updateSignUPForm:(key, value) =>{
       dispatch(userActions.updateSignUPForm(key, value))

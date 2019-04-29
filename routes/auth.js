@@ -26,10 +26,37 @@ function validateSignupForm(payload) {
     errors.password = 'Password must have at least 8 characters.';
   }
 
-  if (!payload || typeof payload.name !== 'string' || payload.name.trim().length === 0) {
+  if (!payload || typeof payload.firstname !== 'string' || payload.firstname.trim().length === 0) {
     isFormValid = false;
-    errors.name = 'Please provide your name.';
+    errors.firstname = 'Please provide your first name.';
   }
+
+  if (!payload || typeof payload.lastname !== 'string' || payload.lastname.trim().length === 0) {
+    isFormValid = false;
+    errors.lastname = 'Please provide your last name.';
+  }
+
+  if (!payload || typeof payload.city !== 'string' || payload.city.trim().length === 0) {
+    isFormValid = false;
+    errors.city = 'Please provide city.';
+  }
+
+  if (!payload || typeof payload.birthday !== 'string' || payload.birthday.trim().length === 0) {
+    isFormValid = false;
+    errors.birthday = 'Please provide your birthday.';
+  }
+
+  if (!payload || payload.privacy.trim().length === 0) {
+    isFormValid = false;
+    errors.privacy = 'Please provide indicate your privacy setting.';
+  }
+
+  if (!payload || typeof payload.interest !== 'string' || payload.interest.trim().length === 0) {
+    isFormValid = false;
+    errors.interest = 'Please provide your research interest.';
+  }
+
+
 
   if (!isFormValid) {
     message = 'Check the form for errors.';
@@ -56,7 +83,7 @@ function validateLoginForm(payload) {
 
   if (!payload || typeof payload.email !== 'string' || payload.email.trim().length === 0) {
     isFormValid = false;
-    errors.email = 'Please provide your email address.';
+    errors.email = 'Please provide your username';
   }
 
   if (!payload || typeof payload.password !== 'string' || payload.password.trim().length === 0) {
@@ -88,14 +115,14 @@ router.post('/signup', (req, res, next) => {
   return passport.authenticate('local-signup', (err) => {
     if (err) {
       console.log(err);
-      if (err.name === 'DuplicateEmail') {
+      if (err.name === 'DuplicateUsername') {
         // the 11000 Mongo code is for a duplication email error
         // the 409 HTTP status code is for conflict error
         console.log("duplicate email");
         return res.status(409).json({
           success: false,
           errors: {
-            email: 'This email is already taken.',
+            email: 'This user name is already taken.',
             message: 'Check the form for errors.'
           }
         });
