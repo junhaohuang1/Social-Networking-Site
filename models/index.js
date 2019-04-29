@@ -7,11 +7,19 @@ var basename  = path.basename(__filename);
 var env       = process.env.NODE_ENV || 'development';
 var config    = require(__dirname + '/../config/config.json')[env];
 var db        = {};
-
+const operatorsAliases = {
+  "$and": "Op.and",
+  "$or": "Op.or",
+  "$eq": "Op.eq",
+  "$gt": "Op.gt",
+  "$lt": "Op.lt",
+  "$lte": "Op.lte",
+  "$like": "Op.like"
+};
 if (config.use_env_variable) {
-  var sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  var sequelize = new Sequelize(process.env[config.use_env_variable], config, { operatorsAliases });
 } else {
-  var sequelize = new Sequelize(config.database, config.username, config.password, config);
+  var sequelize = new Sequelize(config.database, config.username, config.password, config, { operatorsAliases });
 }
 
 fs
