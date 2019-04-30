@@ -5,7 +5,7 @@ const initialState = {
   username:"",
   firstname:"",
   lastname:"",
-  birthday:"",
+  birthday:new Date(),
   password:"",
   privacy: false,
   interest:"",

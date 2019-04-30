@@ -5,6 +5,7 @@ import { Card, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
+import DatePicker from 'react-date-picker';
 
 
 const SignUpForm = (props) => (
@@ -12,7 +13,6 @@ const SignUpForm = (props) => (
     <form action="/" onSubmit={props.onSubmit}>
       <h2 className="card-heading">Sign Up</h2>
 
-      {props.errors.message && <p className="error-message">{props.errors.message}</p>}
 
       <div className="field-line">
         <TextField
@@ -76,11 +76,21 @@ const SignUpForm = (props) => (
       </div>
 
       <div>
+        <DatePicker
+          name="birthday"
+          onChange={props.onChangeDate}
+          value={props.birthday}
+        />
+      </div>
+
+
+      <div>
           <Checkbox
               name="privacy"
+              value='privacy'
               checked={props.privacy}
-              onCheck={props.onChange}
-              label="privacy"
+              onCheck={props.onCheckBoxChange('privacy')}
+              label="Set profile to private."
         />
       </div>
 

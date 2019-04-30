@@ -22,20 +22,23 @@ passport.use('local-signup', new LocalStrategy({
         error.name = 'DuplicateUsername';
         return done(error);
       } else {
+        console.log('creating user')
         db.User.create({
           username: req.body.username.trim(),
           firstname: req.body.firstname.trim(),
           lastname: req.body.firstname.trim(),
-          city: req.city.firstname.trim(),
-          birthday: req.city.firstname.trim(),
+          city: req.body.firstname.trim(),
+          birthday: req.body.birthday,
           password: req.body.password.trim(),
-          privacy: req.body.privacy,
+          privacy: req.body.privacy ? 1 : 0,
           interest: req.body.interest.trim()
         }).then(function(newUser, created){
             if(!newUser){
+              console.log('nothing created');
               return done(null,false);
             }
             if(newUser){
+              console.log('user created');
               return done(null,newUser);
             }
           })

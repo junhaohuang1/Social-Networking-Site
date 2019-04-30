@@ -53,6 +53,13 @@ class SignUpPage extends React.Component {
      this.props.updateSignUPForm(name,value);
    }
 
+   handleChange = name => event => {
+     this.props.updateSignUPForm(name,event.target.checked);
+   };
+
+   changeDate = date => {
+     this.props.updateSignUPForm('birthday',date);
+   };
 
   /**
    * Render the component.
@@ -65,6 +72,8 @@ class SignUpPage extends React.Component {
         <SignUpForm
           onSubmit={this.processForm}
           onChange={this.changeUser}
+          onCheckBoxChange={this.handleChange}
+          onChangeDate={this.changeDate}
           errors={this.props.errors}
           firstname={this.props.firstname}
           lastname={this.props.lastname}

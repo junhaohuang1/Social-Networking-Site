@@ -4,17 +4,15 @@ import { registration } from './registrationReducer.js';
 import { note } from './noteReducer.js'
 import { alert } from './alertReducer.js';
 import {modal} from './modalReducer.js';
-import { routerReducer } from 'react-router-redux';
+import { connectRouter } from 'connected-react-router'
 
 
-const rootReducer = combineReducers({
+export default (history)=> combineReducers({
   authentication,
   registration,
   alert,
   modal,
   note,
 
-  router:routerReducer
+  router:connectRouter(history)
 });
-
-export default rootReducer;

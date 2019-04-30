@@ -2,8 +2,8 @@ import React from 'react';
 import LoginForm from '../components/LoginForm.js';
 import { userActions } from '../actions';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
-import {store} from "../store.js";
+import { push } from 'connected-react-router'
+import configureStore from "../configureStore.js";
 import {withRouter} from "react-router-dom";
 
 
@@ -53,7 +53,7 @@ class LoginPage extends React.Component {
    */
   render() {
     if(this.props.loggedIn){
-      store.dispatch(push('/'))
+      configureStore.dispatch(push('/'))
     }
     return (
       <LoginForm

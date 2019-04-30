@@ -105,7 +105,9 @@ function validateLoginForm(payload) {
 
 router.post('/signup', (req, res, next) => {
   const validationResult = validateSignupForm(req.body);
+  console.log('hiiii');
   if (!validationResult.success) {
+    console.log('invalid form');
     return res.status(400).json({
       success: false,
       message: validationResult.message,
@@ -118,16 +120,16 @@ router.post('/signup', (req, res, next) => {
       if (err.name === 'DuplicateUsername') {
         // the 11000 Mongo code is for a duplication email error
         // the 409 HTTP status code is for conflict error
-        console.log("duplicate email");
+        console.log("duplicate username");
         return res.status(409).json({
           success: false,
           errors: {
-            email: 'This user name is already taken.',
+            username: 'This user name is already taken.',
             message: 'Check the form for errors.'
           }
         });
       }
-
+      console.log('could not process the form')
       return res.status(400).json({
         success: false,
         message: 'Could not process the form.'
