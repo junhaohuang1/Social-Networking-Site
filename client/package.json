@@ -1,36 +1,41 @@
 {
-  "name": "mern",
+  "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3001/",
   "dependencies": {
-    "@hapi/joi": "^15.0.0",
     "axios": "^0.18.0",
-    "history": "^4.7.2",
-    "material-ui": "^0.20.0",
+    "connected-react-router": "^6.4.0",
+    "core-js": "^3.0.1",
+    "history": "^4.9.0",
+    "material-ui": "^0.20.2",
     "react": "^16.8.6",
-    "react-datepicker": "^2.5.0",
     "react-dom": "^16.8.6",
-    "react-modal": "^3.1.13",
+    "react-hot-loader": "^4.8.4",
+    "react-modal": "^3.8.1",
     "react-redux": "^7.0.3",
     "react-router": "^5.0.0",
-    "react-router-config": "^5.0.0",
     "react-router-dom": "^5.0.0",
-    "react-router-redux": "^4.0.8",
-    "react-scripts": "^3.0.0",
-    "react-tap-event-plugin": "^3.0.2",
+    "react-scripts": "3.0.0",
     "redux": "^4.0.1",
-    "redux-form": "^8.2.0",
     "redux-logger": "^3.0.6",
-    "redux-promise-middleware": "^6.1.0",
+    "typescript": "^3.4.5",
+    "react-tap-event-plugin": "^3.0.2",
+    "redux": "^3.7.2",
+    "redux-form": "^7.2.3",
+    "redux-logger": "^3.0.6",
+    "redux-promise-middleware": "^5.0.0",
     "redux-thunk": "^2.2.0",
-    "validator": "^10.11.0"
+    "typescript": "^3.4.5",
+    "validator": "^9.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
   },
   "browserslist": {
     "production": [
