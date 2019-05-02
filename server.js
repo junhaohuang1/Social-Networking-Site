@@ -10,12 +10,15 @@ const session = require('express-session') // for sessions
 const PORT = process.env.PORT || 3001;
 const jwtSecret = "a secret phrase!!";
 var db = require("./models");
+var cors = require('cors')
+
 
 // Configure body parser for AJAX requests
 app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(bodyParser.json());
+app.use(cors())
 // Serve up static assets
 app.use(express.static("client/build"));
 app.use(express.static("client/public"));
@@ -35,6 +38,7 @@ app.use(morgan('combined'))
 
 
 const authCheckMiddleware = (req, res, next) => {
+  // console.log(req.headers);
   if (!req.headers.authorization) {
     console.log('no header authorization');
     return res.status(401).end();
@@ -45,7 +49,7 @@ const authCheckMiddleware = (req, res, next) => {
   // decode the token using a secret key-phrase
   // const token = req.headers.authorization.split('"')[9];
   token = req.headers.authorization;
-  console.log(req.headers);
+  // console.log(req.headers);
   return jwt.verify(token, jwtSecret, (err, decoded) => {
     // the 401 code is for unauthorized status
     if (err) {

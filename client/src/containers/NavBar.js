@@ -3,7 +3,11 @@ import NavBarForm from '../components/NavBarForm.js';
 import NavBarModal from './Modal.js'
 import { userActions, modalActions } from '../actions';
 import { connect } from 'react-redux';
-        //
+import configureStore from "../configureStore.js";
+import { push } from 'connected-react-router'
+
+const store = configureStore()
+
 class NavBar extends React.Component{
 
   constructor(props) {
@@ -13,10 +17,14 @@ class NavBar extends React.Component{
     // This binding is necessary to make `this` work in the callback
     this.logout = this.props.logout.bind(this);
     this.openModal = this.props.openModal.bind(this);
-  }m
+    this.getProfile = this.getProfile.bind(this);
+  }
 
-  getProfileInformation(){
+  getProfile(event){
+    event.preventDefault();
     this.props.getProfile(this.props.userid, this.props.token)
+    store.dispatch(push('/profile'))
+
   }
 
   render() {
@@ -27,7 +35,7 @@ class NavBar extends React.Component{
           loggedIn={this.props.loggedIn}
           openModal={this.openModal}
           modalButton = {this.props.loggedIn ? <NavBarModal/> : null}
-          getProfile = {this.getProfileInformation}
+          getProfile = {this.getProfile}
           />
 
         </div>

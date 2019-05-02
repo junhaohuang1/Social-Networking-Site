@@ -3,6 +3,7 @@ import LoginPage from './containers/LoginPage.js';
 import DashboardPage from './containers/DashboardPage.js';
 import HomePage from './containers/HomePage.js';
 import SignUpPage from './containers/SignUpPage.js';
+import EditProfilePage from '.containers/EditProfilePage.js'
 import Auth from './Auth';
 
 
@@ -25,6 +26,11 @@ const routes = {
     {
       path: '/login',
       component: LoginPage
+    },
+
+    {
+      path: '/profile',
+      component: EditProfilePage
     },
 
     {

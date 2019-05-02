@@ -57,20 +57,42 @@ const signup = (username, firstname, lastname, city, password, birthday, interes
 );
 
 
-const editprofile = (userid, firstname, lastname, city, password, birthday, interest, privacy) => (dispatch) => (
-  dispatch({
+export const editProfile = (userid, firstname, lastname, city, birthday, interest, privacy, token) =>{
+  return (dispatch) =>{
+    return axios.post('/api/editprofile/' +userid,
+     {
+       firstname:firstname,
+       lastname:lastname,
+       city:city,
+       birthday:birthday,
+       interest:interest,
+       privacy:privacy
+     },
+     {
+         headers: {
+         authorization:token
+       }
+      }
+    )
+      .then(response =>{
+        dispatch(editProfileSuccess(response.data))
+      })
+      .catch(error =>{
+        throw(error);
+      })
+
+  }
+}
+
+export const editProfileSuccess =  (data) => {
+  return {
     type: "PROFILE_EDIT",
-    payload: axios.put('/api/editprofile/'+userid, {
-      firstname: firstname,
-      lastname: lastname,
-      city: city,
-      birthday: birthday,
-      interest: interest,
-      privacy: privacy,
-      password: password
-    })
-  })
-);
+    payload: {
+      data:data
+    }
+  }
+};
+
 
 const getProfile = (userid, token) => (dispatch) => (
   dispatch({
@@ -86,13 +108,13 @@ const getProfile = (userid, token) => (dispatch) => (
 
 
 
-
 export const userActions = {
     login,
     logout,
     signup,
     getProfile,
-    editprofile,
+    editProfile,
+    editProfileSuccess,
     updateSignInForm,
     updateSignUPForm,
     updateProfileForm

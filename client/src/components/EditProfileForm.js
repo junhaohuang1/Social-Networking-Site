@@ -12,16 +12,12 @@ const EditProfileForm = (props) => (
     <form action="/" onSubmit={props.onSubmit}>
       <h2 className="card-heading">Profile Page</h2>
 
-      {props.errors.message && <p className="error-message">{props.errors.message}</p>}
-      {props.successMessage && <p className="success-message">{props.successMessage}</p>}
-
 
       <div className="field-line">
         <TextField
           floatingLabelText="First Name"
           name="firstname"
           onChange={props.onChange}
-          errorText={props.errors.firstname ?(props.errors.firstname) :("")}
           value={props.firstname}
         />
       </div>
@@ -31,7 +27,6 @@ const EditProfileForm = (props) => (
           floatingLabelText="Last Name"
           name="lastname"
           onChange={props.onChange}
-          errorText={props.errors.lastname ?(props.errors.lastname) :("")}
           value={props.lastname}
         />
       </div>
@@ -41,28 +36,16 @@ const EditProfileForm = (props) => (
           floatingLabelText="City"
           name="city"
           onChange={props.onChange}
-          errorText={props.errors.city ?(props.errors.city) :("")}
           value={props.city}
         />
       </div>
 
-      <div className="field-line">
-        <TextField
-          floatingLabelText="Password"
-          type="password"
-          name="password"
-          onChange={props.onChange}
-          errorText={props.errors.password ?(props.errors.password) :("")}
-          value={props.password}
-        />
-      </div>
 
       <div className="field-line">
         <TextField
           floatingLabelText="Research Interest"
           name="interest"
           onChange={props.onChange}
-          errorText={props.errors.interest ?(props.errors.interest) :("")}
           value={props.interest}
         />
       </div>

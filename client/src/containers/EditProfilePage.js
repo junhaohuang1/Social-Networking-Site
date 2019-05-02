@@ -25,24 +25,24 @@ class EditProfilePage extends React.Component {
   processForm(event) {
     // prevent default action. in this case, action is the form submission event
     event.preventDefault();
-
     // create a string for an HTTP body message
-    const username = this.props.username;
+    const userid = this.props.userid
     const firstname = this.props.firstname;
     const lastname = this.props.lastname;
-    const password = this.props.password;
-    const birthday = this.props.birthday.getUTCFullYear() + '-' +
-    ('00' + (this.props.birthday.getUTCMonth()+1)).slice(-2) + '-' +
-    ('00' + this.props.birthday.getUTCDate()).slice(-2) + ' ' +
-    ('00' + this.props.birthday.getUTCHours()).slice(-2) + ':' +
-    ('00' + this.props.birthday.getUTCMinutes()).slice(-2) + ':' +
-    ('00' + this.props.birthday.getUTCSeconds()).slice(-2);
+    const birthday = this.props.birthday;
+    // const birthday = this.props.birthday.getUTCFullYear() + '-' +
+    // ('00' + (this.props.birthday.getUTCMonth()+1)).slice(-2) + '-' +
+    // ('00' + this.props.birthday.getUTCDate()).slice(-2) + ' ' +
+    // ('00' + this.props.birthday.getUTCHours()).slice(-2) + ':' +
+    // ('00' + this.props.birthday.getUTCMinutes()).slice(-2) + ':' +
+    // ('00' + this.props.birthday.getUTCSeconds()).slice(-2);
     const privacy = this.props.privacy;
     const city = this.props.city;
     const interest = this.props.interest;
-    if (username && firstname && lastname && password && birthday && privacy && city && interest) {
+    const token = this.props.token
+    if (userid && firstname && lastname && birthday && privacy && city && interest && token) {
 
-        this.props.editprofile(username, firstname, lastname, city, password, birthday, interest, privacy);
+        this.props.editProfile(userid, firstname, lastname, city, birthday, interest, privacy, token);
     }
   }
 
@@ -82,7 +82,6 @@ class EditProfilePage extends React.Component {
           errors={this.props.errors}
           firstname={this.props.firstname}
           lastname={this.props.lastname}
-          password={this.props.password}
           birthday={this.props.birthday}
           city = {this.props.city}
           interest = {this.props.interest}
@@ -95,7 +94,6 @@ class EditProfilePage extends React.Component {
 function mapStateToProps(state) {
   return {
     errors: state.editProfile.errors,
-    successMessage: state.editProfile.successMessage,
     password: state.editProfile.password,
     firstname: state.editProfile.firstname,
     lastname: state.editProfile.lastname,
@@ -104,15 +102,16 @@ function mapStateToProps(state) {
     interest: state.editProfile.interest,
     privacy: state.editProfile.privacy,
     city:  state.editProfile.city,
-    errorMessage: state.editProfile.errorMessage
+    token: state.authentication.token,
+    userid: state.authentication.id
   }
 }
 
 
 const mapDispatchToProps = dispatch => {
   return {
-    editprofile: (userid, firstname, lastname, city, password, birthday, interest, privacy) => {
-      dispatch(userActions.editprofile(userid, firstname, lastname, city, password, birthday, interest, privacy))
+    editProfile: (userid, firstname, lastname, city, birthday, interest, privacy, token) => {
+      dispatch(userActions.editProfile(userid, firstname, lastname, city, birthday, interest, privacy, token))
     },
     updateProfileForm:(key, value) =>{
       dispatch(userActions.updateProfileForm(key, value))

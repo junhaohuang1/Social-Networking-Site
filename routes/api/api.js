@@ -11,13 +11,14 @@ router.get('/dashboard', (req, res) => {
   });
 });
 
-router.put('/editprofile/:userid', (req, res, next) => {
+router.post('/editprofile/:userid', (req, res, next) => {
+  console.log('updating info')
   db.user.update(
-    {firstname: req.body.firstname.trim(),
+    {
+    firstname: req.body.firstname.trim(),
     lastname: req.body.lastname.trim(),
     city: req.body.city.trim(),
     birthday: req.body.birthday,
-    password: req.body.password.trim(),
     privacy: req.body.privacy ? 1 : 0,
     interest: req.body.interest.trim()},
     {
@@ -41,6 +42,12 @@ router.get('/profile/:userid', (req, res, next) => {
       id:req.params.userid
     }
   }).then(function(dbUser) {
+    if(dbUser.dataValues.privacy === 1){
+      dbUser.dataValues.privacy = true
+    } else {
+      dbUser.dataValues.privacy = false
+    }
+
     res.status(200).json(dbUser);
   })
   .catch(next);
