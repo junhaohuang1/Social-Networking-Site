@@ -3,19 +3,21 @@ import Auth from "../Auth.js";
 let user = Auth.checkUserLoggedIn();
 const initialState = user ? ({
   loggedIn: true,
-  username: user.name,
+  username: user.userData.username,
   errors:{},
   successMessage:"",
-  email: '',
-  password: ''
+  id: user.userData.id,
+  password: '',
+  token: user.token
   }) :
 ({
   loggedIn: false,
   username: "",
   errors:{},
   successMessage:"",
-  email: '',
-  password: ''
+  password: '',
+  token: '',
+  id:''
 });
 
 export function authentication(state = initialState, action) {
@@ -38,10 +40,10 @@ export function authentication(state = initialState, action) {
         loggedIn: true,
         loggingIn: false,
         userData: action.payload.data.user.userData,
-        username: action.payload.data.user.userData.name,
+        username: action.payload.data.user.userData.username,
         id: action.payload.data.user.userData.id,
+        token:action.payload.data.user.token,
         errors:{},
-        email: '',
         password: ''
       }
     );

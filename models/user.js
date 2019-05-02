@@ -39,7 +39,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     privacy:{
-      type:DataTypes.BOOLEAN,
+      type:DataTypes.INTEGER,
       allowNull: false
     },
     interest:{

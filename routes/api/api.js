@@ -11,6 +11,43 @@ router.get('/dashboard', (req, res) => {
   });
 });
 
+router.put('/editprofile/:userid', (req, res, next) => {
+  db.user.update(
+    {firstname: req.body.firstname.trim(),
+    lastname: req.body.lastname.trim(),
+    city: req.body.city.trim(),
+    birthday: req.body.birthday,
+    password: req.body.password.trim(),
+    privacy: req.body.privacy ? 1 : 0,
+    interest: req.body.interest.trim()},
+    {
+      returning: true,
+      where:{
+        id:req.params.userid
+      }
+    }
+  ).then(function(rowsUpdated, [updatedUser]){
+    res.status(200).json({
+      updatedUser
+    });
+  }).catch(next)
+});
+
+
+router.get('/profile/:userid', (req, res, next) => {
+  console.log('finding user');
+  db.User.findOne({
+    where: {
+      id:req.params.userid
+    }
+  }).then(function(dbUser) {
+    res.status(200).json(dbUser);
+  })
+  .catch(next);
+});
+
+
+
 router.post('/addfriend', (req, res, next) =>{
   console.log('adding friend');
   // need to add a check for if friends already
@@ -27,8 +64,8 @@ router.post('/addfriend', (req, res, next) =>{
 
 
 router.get('/findfriend', (req, res, next) => {
-  // console.log("at findfriend api");
-  console.log(req.headers.email);
+  console.log("at findfriend api");
+  // console.log('req.headers.email);
   db.User.findOne({
     where:{
       email:req.headers.email

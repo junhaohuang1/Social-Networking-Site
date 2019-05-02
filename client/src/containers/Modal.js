@@ -51,7 +51,7 @@ class NavBarModal extends React.Component {
   render() {
     return (
       <div>
-        <Link to="#" onClick={this.props.openModal}>Upload Image</Link>
+        <Link to="#" onClick={this.props.openModal}>Create Post</Link>
         <Modal
           isOpen={this.props.modalIsOpen}
           onAfterOpen={this.afterOpenModal}

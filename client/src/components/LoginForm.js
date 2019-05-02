@@ -16,11 +16,11 @@ const LoginForm = (props) => (
 
       <div className="field-line">
         <TextField
-          floatingLabelText="Email"
-          name="email"
-          errorText={props.errors.email}
+          floatingLabelText="Username"
+          name="username"
+          errorText={props.errors.username}
           onChange={props.onChange}
-          value={props.email}
+          value={props.username}
         />
       </div>
 
@@ -48,7 +48,7 @@ LoginForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   successMessage: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
 };
 

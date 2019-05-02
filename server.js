@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 // const mongoose = require("mongoose");
 var passport = require("./config/passport");
 // const User = require('./models/user');
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const app = express();
 const morgan = require('morgan'); // JUST FOR LOGS
 const session = require('express-session') // for sessions
@@ -31,28 +31,34 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(morgan('combined'))
 
 
-// pass the authenticaion checker middleware
 const authCheckMiddleware = (req, res, next) => {
   if (!req.headers.authorization) {
+    console.log('no header authorization');
     return res.status(401).end();
   }
 
   // get the last part from a authorization header string like "bearer token-value"
-  const token = req.headers.authorization.split(' ')[1];
-
+  // const token = req.headers.authorization.split(' ')[1];
   // decode the token using a secret key-phrase
+  // const token = req.headers.authorization.split('"')[9];
+  token = req.headers.authorization;
+  console.log(req.headers);
   return jwt.verify(token, jwtSecret, (err, decoded) => {
     // the 401 code is for unauthorized status
-    if (err) { return res.status(401).end(); }
+    if (err) {
+      // console.log(err);
+      return res.status(401).end();
+    }
 
     const userId = decoded.sub;
 
     // check if a user exists
     return db.User.findOne({
       where: {
-        userId: userId
+        id: userId
       }
     }).then(function(dbUser) {
         if (!dbUser) {

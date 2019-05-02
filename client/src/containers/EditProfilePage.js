@@ -1,9 +1,10 @@
+
 import React from 'react';
-import SignUpForm from '../components/SignUpForm.js';
+import EditProfileForm from '../components/EditProfileForm.js';
 import { userActions } from '../actions';
 import { connect } from 'react-redux';
 
-class SignUpPage extends React.Component {
+class EditProfilePage extends React.Component {
 
   /**
    * Class constructor.
@@ -41,7 +42,7 @@ class SignUpPage extends React.Component {
     const interest = this.props.interest;
     if (username && firstname && lastname && password && birthday && privacy && city && interest) {
 
-        this.props.signup(username, firstname, lastname, city, password, birthday, interest, privacy);
+        this.props.editprofile(username, firstname, lastname, city, password, birthday, interest, privacy);
     }
   }
 
@@ -54,15 +55,15 @@ class SignUpPage extends React.Component {
    changeUser(event) {
      const name = event.target.name;
      const value = event.target.value;
-     this.props.updateSignUPForm(name,value);
+     this.props.updateProfileForm(name,value);
    }
 
    handleChange = name => event => {
-     this.props.updateSignUPForm(name,event.target.checked);
+     this.props.updateProfileForm(name,event.target.checked);
    };
 
    changeDate = date => {
-     this.props.updateSignUPForm('birthday',date);
+     this.props.updateProfileForm('birthday',date);
    };
 
   /**
@@ -73,7 +74,7 @@ class SignUpPage extends React.Component {
       //   store.dispatch(push("/login"))
       // }
       return (
-        <SignUpForm
+        <EditProfileForm
           onSubmit={this.processForm}
           onChange={this.changeUser}
           onCheckBoxChange={this.handleChange}
@@ -83,7 +84,6 @@ class SignUpPage extends React.Component {
           lastname={this.props.lastname}
           password={this.props.password}
           birthday={this.props.birthday}
-          username={this.props.username}
           city = {this.props.city}
           interest = {this.props.interest}
           privacy={this.props.privacy}
@@ -94,32 +94,30 @@ class SignUpPage extends React.Component {
 }
 function mapStateToProps(state) {
   return {
-    registering: state.registration.registering,
-    registered: state.registration.registered,
-    errors: state.registration.errors,
-    successMessage: state.registration.successMessage,
-    password: state.registration.password,
-    firstname: state.registration.firstname,
-    lastname: state.registration.lastname,
-    birthday: state.registration.birthday,
-    username: state.registration.username,
-    interest: state.registration.interest,
-    privacy: state.registration.privacy,
-    city:  state.registration.city,
-    errorMessage: state.registration.errorMessage
+    errors: state.editProfile.errors,
+    successMessage: state.editProfile.successMessage,
+    password: state.editProfile.password,
+    firstname: state.editProfile.firstname,
+    lastname: state.editProfile.lastname,
+    birthday: state.editProfile.birthday,
+    username: state.editProfile.username,
+    interest: state.editProfile.interest,
+    privacy: state.editProfile.privacy,
+    city:  state.editProfile.city,
+    errorMessage: state.editProfile.errorMessage
   }
 }
 
 
 const mapDispatchToProps = dispatch => {
   return {
-    signup: (username, firstname, lastname, city, password, birthday, interest, privacy) => {
-      dispatch(userActions.signup(username, firstname, lastname, city, password, birthday, interest, privacy))
+    editprofile: (userid, firstname, lastname, city, password, birthday, interest, privacy) => {
+      dispatch(userActions.editprofile(userid, firstname, lastname, city, password, birthday, interest, privacy))
     },
-    updateSignUPForm:(key, value) =>{
-      dispatch(userActions.updateSignUPForm(key, value))
+    updateProfileForm:(key, value) =>{
+      dispatch(userActions.updateProfileForm(key, value))
     }
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUpPage)
+export default connect(mapStateToProps, mapDispatchToProps)(EditProfilePage)

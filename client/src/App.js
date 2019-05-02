@@ -7,6 +7,7 @@ import {Redirect} from 'react-router-dom'
 import LoginPage from './containers/LoginPage.js';
 import HomePage from './containers/HomePage.js';
 import SignUpPage from './containers/SignUpPage.js';
+import EditProfilePage from './containers/EditProfilePage.js'
 
 import NavBar from './containers/NavBar.js';
 
@@ -22,7 +23,7 @@ const App = (props) => {
           <Switch>
             <Route exact path = '/' component = {HomePage}/>
             <Route path = '/signup' component = {SignUpPage}/>
-            <Route path = '/checkMeOut' component = {LoginPage}/>
+            <Route path = '/profile' component = {EditProfilePage}/>
             <Route path = '/login' component = {LoginPage}/>
             <Route path="/logout"  render={() => (<Redirect to="/"/>)}/>
           </Switch>

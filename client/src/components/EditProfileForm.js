@@ -1,31 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import {Link} from 'react-router-dom';
-import { Card, CardText } from 'material-ui/Card';
+import { Card } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
 import DatePicker from 'react-date-picker';
 
 
-const SignUpForm = (props) => (
+const EditProfileForm = (props) => (
   <Card className="container">
     <form action="/" onSubmit={props.onSubmit}>
-      <h2 className="card-heading">Sign Up</h2>
-      <h2 className="card-heading">All Fields Are Required</h2>
+      <h2 className="card-heading">Profile Page</h2>
 
       {props.errors.message && <p className="error-message">{props.errors.message}</p>}
       {props.successMessage && <p className="success-message">{props.successMessage}</p>}
 
-      <div className="field-line">
-        <TextField
-          floatingLabelText="Username"
-          name="username"
-		      errorText={props.errors.username ?(props.errors.username):("")}
-          onChange={props.onChange}
-          value={props.username}
-        />
-      </div>
 
       <div className="field-line">
         <TextField
@@ -98,17 +87,15 @@ const SignUpForm = (props) => (
         />
       </div>
 
-
       <div className="button-line">
-        <RaisedButton type="submit" label="Create New Account" primary />
+        <RaisedButton type="submit" label="Save Changes" primary />
       </div>
 
-      <CardText>Already have an account? <Link to={'/login'}>Log in</Link></CardText>
     </form>
   </Card>
 );
 
-SignUpForm.propTypes = {
+EditProfileForm.propTypes = {
 	onSubmit: PropTypes.func.isRequired,
 	onChange: PropTypes.func.isRequired,
 	errors: PropTypes.object.isRequired,
@@ -116,9 +103,8 @@ SignUpForm.propTypes = {
 	lastname:PropTypes.string.isRequired,
 	password:PropTypes.string.isRequired,
 	birthday:PropTypes.instanceOf(Date).isRequired,
-	username:PropTypes.string.isRequired,
 	city: PropTypes.string.isRequired,
 	privacy: PropTypes.bool.isRequired,
 };
 
-export default SignUpForm;
+export default EditProfileForm;

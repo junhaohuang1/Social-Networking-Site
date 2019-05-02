@@ -11,7 +11,10 @@ console.log("NavBarForm props", props)
       {props.loggedIn ? (
         <ul className="nav navbar-nav">
           <li className="nav-item">
-            <Link to="/logout" onClick={props.onClick} >Log out</Link>
+            <Link to="/profile/" onClick={props.getProfile}>Edit Profile</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/logout" onClick={props.logout} >Log out</Link>
           </li>
           <li className="nav-item">
             {props.modalButton}

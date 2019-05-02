@@ -9,7 +9,7 @@ class Auth {
     */
 
   static checkUserLoggedIn(){
-    return localStorage.getItem('user')
+    return JSON.parse(localStorage.getItem('user'))
   }
 
   /**

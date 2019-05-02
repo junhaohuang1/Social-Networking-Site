@@ -26,8 +26,8 @@ passport.use('local-signup', new LocalStrategy({
         db.User.create({
           username: req.body.username.trim(),
           firstname: req.body.firstname.trim(),
-          lastname: req.body.firstname.trim(),
-          city: req.body.firstname.trim(),
+          lastname: req.body.lastname.trim(),
+          city: req.body.city.trim(),
           birthday: req.body.birthday,
           password: req.body.password.trim(),
           privacy: req.body.privacy ? 1 : 0,
@@ -59,6 +59,7 @@ passport.use('local-signin', new LocalStrategy({
   passReqToCallback: true
 },function(req, username, password, done) {
     // When a user tries to sign in this code runs
+    console.log(username)
     db.User.findOne({
       where: {
         username: username
@@ -66,13 +67,13 @@ passport.use('local-signin', new LocalStrategy({
     }).then(function(dbUser) {
       // If there's no user with the given email
       if (!dbUser) {
-        const error = new Error('Incorrect email or password');
+        const error = new Error('Incorrect username or password');
         error.name = 'IncorrectCredentialsError';
         return done(error);
       }
       // If there is a user with the given email, but the password the user gives us is incorrect
       else if (!dbUser.validPassword(password)) {
-        const error = new Error('Incorrect email or password');
+        const error = new Error('Incorrect username or password');
         error.name = 'IncorrectCredentialsError';
         return done(error);
       }
@@ -84,7 +85,7 @@ passport.use('local-signin', new LocalStrategy({
       // create a token string
       const token = jwt.sign(payload, jwtSecret);
       const data = {
-        name: dbUser.name,
+        username: dbUser.username,
         id: dbUser.id
       };
       return done(null, token, data);

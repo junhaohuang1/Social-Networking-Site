@@ -42,6 +42,7 @@ export function registration(state = initialState, action) {
   		password:"",
       interest:"",
   		privacy: false,
+      city:"",
       errorMessage:""
     };
     case "USERS_REGISTER_REJECTED":

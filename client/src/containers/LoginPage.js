@@ -6,7 +6,7 @@ import { push } from 'connected-react-router'
 import configureStore from "../configureStore.js";
 import {withRouter} from "react-router-dom";
 
-
+const store = configureStore()
 
 class LoginPage extends React.Component {
 
@@ -30,11 +30,11 @@ class LoginPage extends React.Component {
     event.preventDefault();
 
     // create a string for an HTTP body message
-    const email = this.props.email;
+    const username = this.props.username;
     const password = this.props.password;
-     if (email && password) {
-         this.props.login(email,password);
-     }
+     // if (username && password) {
+         this.props.login(username,password);
+     // }
   }
 
   /**
@@ -53,7 +53,7 @@ class LoginPage extends React.Component {
    */
   render() {
     if(this.props.loggedIn){
-      configureStore.dispatch(push('/'))
+      store.dispatch(push('/'))
     }
     return (
       <LoginForm
@@ -61,7 +61,7 @@ class LoginPage extends React.Component {
         onChange={this.changeUser}
         errors={this.props.errors}
         successMessage={this.props.successMessage}
-        email={this.props.email}
+        username={this.props.username}
         password={this.props.password}
       />
     );
@@ -75,15 +75,15 @@ function mapStateToProps(state) {
     loggedIn: state.authentication.loggedIn,
     errors: state.authentication.errors,
     successMessage: state.registration.successMessage,
-    email: state.authentication.email,
+    username: state.authentication.username,
     password: state.authentication.password,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    login: (email,password) => {
-      dispatch(userActions.login(email,password))
+    login: (username,password) => {
+      dispatch(userActions.login(username,password))
     },
     updateSignInForm:(key, value) =>{
       dispatch(userActions.updateSignInForm(key, value))
