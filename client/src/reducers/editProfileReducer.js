@@ -12,6 +12,8 @@ const initialState = {
   errorMessage:"",
   emailError:"",
   passwordError:"",
+  country:"",
+  region:"",
 }
 export function editProfile(state = initialState, action) {
   switch (action.type) {
@@ -22,7 +24,8 @@ export function editProfile(state = initialState, action) {
       birthday:action.payload.data.birthday,
       interest:action.payload.data.interest,
       privacy: action.payload.data.privacy,
-      city:action.payload.data.city,
+      country:action.payload.data.country,
+      region:action.payload.data.region,
     }
     case "PROFILE_FORM_UPDATE_VALUE_FULFILLED":
     return {
@@ -43,7 +46,8 @@ export function editProfile(state = initialState, action) {
       birthday:action.payload.data.birthday,
       interest:action.payload.data.interest,
       privacy: action.payload.data.privacy,
-      city:action.payload.data.city,
+      country:action.payload.data.country,
+      region:action.payload.data.region,
       errorMessage:""
     };
     case "PROFILE_EDIT_REJECTED":

@@ -12,8 +12,9 @@ const initialState = {
   errors:{},
   successMessage:"",
   errorMessage:"",
-  emailError:"",
   passwordError:"",
+  country:"",
+  region:"",
 }
 export function registration(state = initialState, action) {
   switch (action.type) {
@@ -42,8 +43,8 @@ export function registration(state = initialState, action) {
   		password:"",
       interest:"",
   		privacy: false,
-      city:"",
-      errorMessage:""
+      country:"",
+      region:"",
     };
     case "USERS_REGISTER_REJECTED":
       return {

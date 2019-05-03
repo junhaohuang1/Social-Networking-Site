@@ -37,11 +37,12 @@ class SignUpPage extends React.Component {
     ('00' + this.props.birthday.getUTCMinutes()).slice(-2) + ':' +
     ('00' + this.props.birthday.getUTCSeconds()).slice(-2);
     const privacy = this.props.privacy;
-    const city = this.props.city;
+    const region = this.props.region;
+    const country = this.props.country;
     const interest = this.props.interest;
-    if (username && firstname && lastname && password && birthday && privacy && city && interest) {
+    if (username && firstname && lastname && password && birthday && privacy && country && region && interest) {
 
-        this.props.signup(username, firstname, lastname, city, password, birthday, interest, privacy);
+        this.props.signup(username, firstname, lastname, country, region, password, birthday, interest, privacy);
     }
   }
 
@@ -65,6 +66,25 @@ class SignUpPage extends React.Component {
      this.props.updateSignUPForm('birthday',date);
    };
 
+  selectCountry = val => {
+    this.props.updateSignUPForm('country', val);
+  }
+
+  selectRegion = val => {
+    this.props.updateSignUPForm('region', val);
+  }
+
+
+  getRegions = country => {
+  if (!country) {
+    return [];
+  }
+  return country[2].split("|").map(regionPair => {
+      let [regionName, regionShortCode = null] = regionPair.split("~");
+      return regionName;
+    });
+  };
+
   /**
    * Render the component.
    */
@@ -78,13 +98,17 @@ class SignUpPage extends React.Component {
           onChange={this.changeUser}
           onCheckBoxChange={this.handleChange}
           onChangeDate={this.changeDate}
+          selectCountry={this.selectCountry}
+          selectRegion={this.selectRegion}
+          getRegions={this.getRegions}
           errors={this.props.errors}
           firstname={this.props.firstname}
           lastname={this.props.lastname}
           password={this.props.password}
           birthday={this.props.birthday}
           username={this.props.username}
-          city = {this.props.city}
+          region = {this.props.region}
+          country = {this.props.country}
           interest = {this.props.interest}
           privacy={this.props.privacy}
         />
@@ -105,7 +129,8 @@ function mapStateToProps(state) {
     username: state.registration.username,
     interest: state.registration.interest,
     privacy: state.registration.privacy,
-    city:  state.registration.city,
+    region:  state.registration.region,
+    country:  state.registration.country,
     errorMessage: state.registration.errorMessage
   }
 }
@@ -113,8 +138,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => {
   return {
-    signup: (username, firstname, lastname, city, password, birthday, interest, privacy) => {
-      dispatch(userActions.signup(username, firstname, lastname, city, password, birthday, interest, privacy))
+    signup: (username, firstname, lastname, country, region, password, birthday, interest, privacy) => {
+      dispatch(userActions.signup(username, firstname, lastname, country, region, password, birthday, interest, privacy))
     },
     updateSignUPForm:(key, value) =>{
       dispatch(userActions.updateSignUPForm(key, value))

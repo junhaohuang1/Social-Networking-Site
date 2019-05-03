@@ -79,7 +79,6 @@ class EditProfilePage extends React.Component {
           onChange={this.changeUser}
           onCheckBoxChange={this.handleChange}
           onChangeDate={this.changeDate}
-          errors={this.props.errors}
           firstname={this.props.firstname}
           lastname={this.props.lastname}
           birthday={this.props.birthday}
@@ -93,8 +92,6 @@ class EditProfilePage extends React.Component {
 }
 function mapStateToProps(state) {
   return {
-    errors: state.editProfile.errors,
-    password: state.editProfile.password,
     firstname: state.editProfile.firstname,
     lastname: state.editProfile.lastname,
     birthday: state.editProfile.birthday,

@@ -40,14 +40,15 @@ function logout() {
     return { type: "USERS_LOGOUT" };
 }
 
-const signup = (username, firstname, lastname, city, password, birthday, interest, privacy) => (dispatch) => (
+const signup = (username, firstname, lastname, country, region, password, birthday, interest, privacy) => (dispatch) => (
   dispatch({
     type: "USERS_REGISTER",
     payload: axios.post('/auth/signup', {
       username: username,
       firstname: firstname,
       lastname: lastname,
-      city: city,
+      country: country,
+      region:region,
       birthday: birthday,
       interest: interest,
       privacy: privacy,

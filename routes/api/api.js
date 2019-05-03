@@ -13,7 +13,7 @@ router.get('/dashboard', (req, res) => {
 
 router.post('/editprofile/:userid', (req, res, next) => {
   console.log('updating info')
-  db.user.update(
+  db.User.update(
     {
     firstname: req.body.firstname.trim(),
     lastname: req.body.lastname.trim(),
@@ -22,14 +22,14 @@ router.post('/editprofile/:userid', (req, res, next) => {
     privacy: req.body.privacy ? 1 : 0,
     interest: req.body.interest.trim()},
     {
-      returning: true,
       where:{
         id:req.params.userid
-      }
+      },
+      returning: true
     }
-  ).then(function(rowsUpdated, [updatedUser]){
+  ).then(function(rowsUpdated){
     res.status(200).json({
-      updatedUser
+      rowsUpdated
     });
   }).catch(next)
 });

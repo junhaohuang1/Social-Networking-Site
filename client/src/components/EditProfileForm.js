@@ -81,10 +81,8 @@ const EditProfileForm = (props) => (
 EditProfileForm.propTypes = {
 	onSubmit: PropTypes.func.isRequired,
 	onChange: PropTypes.func.isRequired,
-	errors: PropTypes.object.isRequired,
 	firstname:PropTypes.string.isRequired,
 	lastname:PropTypes.string.isRequired,
-	password:PropTypes.string.isRequired,
 	birthday:PropTypes.instanceOf(Date).isRequired,
 	city: PropTypes.string.isRequired,
 	privacy: PropTypes.bool.isRequired,

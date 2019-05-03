@@ -34,7 +34,11 @@ module.exports = function(sequelize, DataTypes) {
       type:DataTypes.DATE,
       allowNull:false
     },
-    city:{
+    country:{
+      type:DataTypes.STRING,
+      allowNull: false
+    },
+    region:{
       type:DataTypes.STRING,
       allowNull: false
     },
