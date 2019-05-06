@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
 import DatePicker from 'react-date-picker';
+import Select from 'react-select';
 
 
 const EditProfileForm = (props) => (
@@ -32,13 +33,25 @@ const EditProfileForm = (props) => (
       </div>
 
       <div className="field-line">
-        <TextField
-          floatingLabelText="City"
-          name="city"
-          onChange={props.onChange}
-          value={props.city}
-        />
+      Country
+      <Select
+          value={props.country}
+          onChange={props.selectCountry}
+          options={props.countryOptions}
+      />
       </div>
+
+      <div className="field-line">
+      Region
+      <Select
+          value={props.region}
+          onChange={props.selectRegion}
+          options={props.getRegions(props.country.value).map((option) =>(
+            {value:option, label: option}
+          ))}
+      />
+      </div>
+
 
 
       <div className="field-line">
@@ -84,8 +97,9 @@ EditProfileForm.propTypes = {
 	firstname:PropTypes.string.isRequired,
 	lastname:PropTypes.string.isRequired,
 	birthday:PropTypes.instanceOf(Date).isRequired,
-	city: PropTypes.string.isRequired,
 	privacy: PropTypes.bool.isRequired,
+  country: PropTypes.string.isRequired,
+  region: PropTypes.string.isRequired,
 };
 
 export default EditProfileForm;

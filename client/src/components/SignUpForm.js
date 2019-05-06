@@ -6,9 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
 import DatePicker from 'react-date-picker';
-import MenuItem from "material-ui/MenuItem";
-import {CountryRegionData} from 'react-country-region-selector';
-import Select from '@material-ui/core/Select';
+import Select from 'react-select';
 
 const SignUpForm = (props) => (
   <Card className="container">
@@ -62,17 +60,23 @@ const SignUpForm = (props) => (
       </div>
 
       <div className="field-line">
+      Country
       <Select
           value={props.country}
           onChange={props.selectCountry}
-        >
-          {CountryRegionData.map((option, index) => (
-            <MenuItem key={option[0]} value={option}>
-              {option[0]}
-            </MenuItem>
+          options={props.countryOptions}
+      />
+      </div>
+
+      <div className="field-line">
+      Region
+      <Select
+          value={props.region}
+          onChange={props.selectRegion}
+          options={props.getRegions(props.country.value).map((option) =>(
+            {value:option, label: option}
           ))}
-      </Select>
-        <br />
+      />
       </div>
 
       <div className="field-line">
@@ -85,13 +89,13 @@ const SignUpForm = (props) => (
         />
       </div>
 
+      <div>Birthday</div>
       <div className="field-line" >
         <DatePicker
           name="birthday"
           onChange={props.onChangeDate}
           value={props.birthday}
         />
-        Birthday
       </div>
 
 

@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes){
-  var Likes = sequelize.define('Likes', {
+  var Like = sequelize.define('Like', {
     userID:{
       type: DataTypes.INTEGER,
       allowNull: false
@@ -9,5 +9,5 @@ module.exports = function(sequelize, DataTypes){
       allowNull: false
     },
   });
-  return Likes;
+  return Like;
 }

@@ -40,10 +40,18 @@ function validateSignupForm(payload) {
     console.log(errors.lastname)
   }
 
-  if (!payload || typeof payload.city !== 'string' || payload.city.trim().length === 0) {
+  if (!payload || typeof payload.country.label !== 'string' || payload.country.label.trim().length === 0) {
     isFormValid = false;
-    errors.city = 'Please provide city.';
-    console.log(errors.city)
+    console.log(payload.country.label)
+    errors.country = 'Please provide country.';
+    console.log(errors.country)
+  }
+
+  if (!payload || typeof payload.region.label !== 'string' || payload.region.label.trim().length === 0) {
+    isFormValid = false;
+    console.log(payload.region.label)
+    errors.region = 'Please provide region.';
+    console.log(errors.region)
   }
 
   if (!payload || payload.birthday.length === 0) {

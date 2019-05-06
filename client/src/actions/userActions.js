@@ -58,13 +58,14 @@ const signup = (username, firstname, lastname, country, region, password, birthd
 );
 
 
-export const editProfile = (userid, firstname, lastname, city, birthday, interest, privacy, token) =>{
+export const editProfile = (userid, firstname, lastname, country, region, birthday, interest, privacy, token) =>{
   return (dispatch) =>{
     return axios.post('/api/editprofile/' +userid,
      {
        firstname:firstname,
        lastname:lastname,
-       city:city,
+       country:country,
+       region:region,
        birthday:birthday,
        interest:interest,
        privacy:privacy

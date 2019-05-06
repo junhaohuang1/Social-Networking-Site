@@ -56,8 +56,13 @@ export function authentication(state = initialState, action) {
       };
     case "USERS_LOGOUT":
       return {
-        ...state,
-        loggedIn: false
+        loggedIn: false,
+        username: "",
+        errors:{},
+        successMessage:"",
+        password: '',
+        token: '',
+        id:''
       };
     default:
       return state

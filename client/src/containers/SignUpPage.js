@@ -2,6 +2,7 @@ import React from 'react';
 import SignUpForm from '../components/SignUpForm.js';
 import { userActions } from '../actions';
 import { connect } from 'react-redux';
+import {CountryRegionData} from 'react-country-region-selector';
 
 class SignUpPage extends React.Component {
 
@@ -15,6 +16,8 @@ class SignUpPage extends React.Component {
     this.processForm = this.processForm.bind(this);
     this.changeUser = this.changeUser.bind(this);
   }
+
+
 
   /**
    * Process the form.
@@ -41,7 +44,6 @@ class SignUpPage extends React.Component {
     const country = this.props.country;
     const interest = this.props.interest;
     if (username && firstname && lastname && password && birthday && privacy && country && region && interest) {
-
         this.props.signup(username, firstname, lastname, country, region, password, birthday, interest, privacy);
     }
   }
@@ -58,6 +60,27 @@ class SignUpPage extends React.Component {
      this.props.updateSignUPForm(name,value);
    }
 
+   getRegions = country => {
+   if (!country) {
+     return [];
+   }
+   return country[2].split("|").map(regionPair => {
+       let [regionName, regionShortCode = null] = regionPair.split("~");
+       return regionName;
+     });
+   };
+
+
+
+  countryOptions =
+     CountryRegionData.map((option) => (
+       {value:option, label: option[0]}
+     ))
+
+   // regionOptions = this.props.getRegions(this.props.country).map((option) => (
+   //   {value:option, label: option}
+   // ))
+
    handleChange = name => event => {
      this.props.updateSignUPForm(name,event.target.checked);
    };
@@ -66,24 +89,17 @@ class SignUpPage extends React.Component {
      this.props.updateSignUPForm('birthday',date);
    };
 
-  selectCountry = val => {
-    this.props.updateSignUPForm('country', val);
+  selectCountry = (selectedOption) => {
+    this.props.updateSignUPForm('country', selectedOption);
+    // this.props.updateSignUPForm('regionoptions', event.target.value);
   }
 
-  selectRegion = val => {
-    this.props.updateSignUPForm('region', val);
+  selectRegion = selectedOption => {
+    this.props.updateSignUPForm('region', selectedOption);
   }
 
 
-  getRegions = country => {
-  if (!country) {
-    return [];
-  }
-  return country[2].split("|").map(regionPair => {
-      let [regionName, regionShortCode = null] = regionPair.split("~");
-      return regionName;
-    });
-  };
+
 
   /**
    * Render the component.
@@ -94,6 +110,7 @@ class SignUpPage extends React.Component {
       // }
       return (
         <SignUpForm
+          countryOptions={this.countryOptions}
           onSubmit={this.processForm}
           onChange={this.changeUser}
           onCheckBoxChange={this.handleChange}

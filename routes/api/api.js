@@ -1,6 +1,8 @@
 const express = require('express');
 var db = require("../../models");
 const url = require('url');
+var multer  = require('multer')
+var upload = multer({ dest: '/assets/uploads/' })
 
 const router = new express.Router();
 
@@ -11,13 +13,49 @@ router.get('/dashboard', (req, res) => {
   });
 });
 
+
+router.post('/createimagepost',upload.single('image'), (req, res) => {
+  // console.log(req.body);
+  db.Post.create({
+    username:req.body.username,
+    title:req.body.title,
+    body:req.body.textbody,
+    path:req.file.path,
+    mimetype:req.file.mimetype,
+  }).then(function(newPost, created){
+    res.status(200);
+    res.end();
+  })
+});
+
+router.post('/createvideopost',upload.single('videoFile'), (req, res) => {
+  // console.log(req.body);
+  db.Post.create({
+    username:req.body.username.trim(),
+    title:req.body.title.trim(),
+    body:req.body.textbody,
+    region: req.body.region.label.trim(),
+    country:req.body.country.label.trim(),
+    path:req.file.path,
+    mimetype:req.file.mimetype,
+  }).then(function(newPost, created){
+    res.status(200);
+    res.end();
+  })
+});
+
+
+
+
+
 router.post('/editprofile/:userid', (req, res, next) => {
   console.log('updating info')
   db.User.update(
     {
     firstname: req.body.firstname.trim(),
     lastname: req.body.lastname.trim(),
-    city: req.body.city.trim(),
+    region: req.body.region.label.trim(),
+    country:req.body.country.label.trim(),
     birthday: req.body.birthday,
     privacy: req.body.privacy ? 1 : 0,
     interest: req.body.interest.trim()},

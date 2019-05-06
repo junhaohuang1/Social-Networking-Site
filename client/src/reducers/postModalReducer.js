@@ -1,12 +1,17 @@
 const initialState = {
   modalIsOpen: false,
-  src:"",
+  title:"",
+  textbody:"",
+  file:"",
   uploading: false,
   uploaded: false,
   errorMessage:"",
+  region:"",
+  country:"",
+  errors:{}
 }
 
-export function modal(state = initialState, action) {
+export function postModal(state = initialState, action) {
   switch(action.type){
     case "MODAL_OPEN":
       return{
@@ -23,18 +28,18 @@ export function modal(state = initialState, action) {
       ...state,
       [action.key]: action.value
     };
-    case "UPLOAD_IMAGE_PENDING":
+    case "CREATE_POST_PENDING":
     return {
       ...state,
       uploading: true
     };
-    case "UPLOAD_IMAGE_FULFILLED":
+    case "CREATE_POST_FULFILLED":
     return {
       ...state,
       uploading: false,
       uploaded: true
     };
-    case "UPLOAD_IMAGE_REJECTED":
+    case "CREATE_POST_REJECTED":
     return {
       ...state,
       uploading: false,

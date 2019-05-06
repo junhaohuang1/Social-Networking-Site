@@ -3,6 +3,7 @@ import React from 'react';
 import EditProfileForm from '../components/EditProfileForm.js';
 import { userActions } from '../actions';
 import { connect } from 'react-redux';
+import {CountryRegionData} from 'react-country-region-selector';
 
 class EditProfilePage extends React.Component {
 
@@ -62,9 +63,39 @@ class EditProfilePage extends React.Component {
      this.props.updateProfileForm(name,event.target.checked);
    };
 
+
+   getRegions = country => {
+   if (!country) {
+     return [];
+   }
+
+   return country[2].split("|").map(regionPair => {
+       let [regionName, regionShortCode = null] = regionPair.split("~");
+       return regionName;
+     });
+   };
+
+
+  countryOptions =
+     CountryRegionData.map((option) => (
+       {value:option, label: option[0]}
+     ))
+
    changeDate = date => {
      this.props.updateProfileForm('birthday',date);
    };
+
+   selectCountry = (selectedOption) => {
+     this.props.updateProfileForm('country', selectedOption);
+     // this.props.updateSignUPForm('regionoptions', event.target.value);
+   }
+
+   selectRegion = selectedOption => {
+     this.props.updateProfileForm('region', selectedOption);
+   }
+
+
+
 
   /**
    * Render the component.
@@ -75,16 +106,21 @@ class EditProfilePage extends React.Component {
       // }
       return (
         <EditProfileForm
+          countryOptions={this.countryOptions}
           onSubmit={this.processForm}
           onChange={this.changeUser}
           onCheckBoxChange={this.handleChange}
           onChangeDate={this.changeDate}
+          selectCountry={this.selectCountry}
+          selectRegion={this.selectRegion}
+          getRegions={this.getRegions}
           firstname={this.props.firstname}
           lastname={this.props.lastname}
           birthday={this.props.birthday}
-          city = {this.props.city}
           interest = {this.props.interest}
           privacy={this.props.privacy}
+          region = {this.props.region}
+          country = {this.props.country}
         />
       );
   }
@@ -93,12 +129,13 @@ class EditProfilePage extends React.Component {
 function mapStateToProps(state) {
   return {
     firstname: state.editProfile.firstname,
+    region:  state.editProfile.region,
+    country:  state.editProfile.country,
     lastname: state.editProfile.lastname,
     birthday: state.editProfile.birthday,
     username: state.editProfile.username,
     interest: state.editProfile.interest,
     privacy: state.editProfile.privacy,
-    city:  state.editProfile.city,
     token: state.authentication.token,
     userid: state.authentication.id
   }
@@ -107,8 +144,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => {
   return {
-    editProfile: (userid, firstname, lastname, city, birthday, interest, privacy, token) => {
-      dispatch(userActions.editProfile(userid, firstname, lastname, city, birthday, interest, privacy, token))
+    editProfile: (userid, firstname, lastname, country, region, birthday, interest, privacy, token) => {
+      dispatch(userActions.editProfile(userid, firstname, lastname, country, region, birthday, interest, privacy, token))
     },
     updateProfileForm:(key, value) =>{
       dispatch(userActions.updateProfileForm(key, value))

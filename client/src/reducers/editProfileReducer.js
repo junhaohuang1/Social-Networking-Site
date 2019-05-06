@@ -24,8 +24,8 @@ export function editProfile(state = initialState, action) {
       birthday:action.payload.data.birthday,
       interest:action.payload.data.interest,
       privacy: action.payload.data.privacy,
-      country:action.payload.data.country,
-      region:action.payload.data.region,
+      country:{label:action.payload.data.country},
+      region:{label:action.payload.data.region}
     }
     case "PROFILE_FORM_UPDATE_VALUE_FULFILLED":
     return {

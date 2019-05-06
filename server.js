@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3001;
 const jwtSecret = "a secret phrase!!";
 var db = require("./models");
 var cors = require('cors')
+var multer = require('multer');
 
 
 // Configure body parser for AJAX requests
@@ -22,6 +23,7 @@ app.use(cors())
 // Serve up static assets
 app.use(express.static("client/build"));
 app.use(express.static("client/public"));
+app.use('/images/', express.static('/assets/uploads/'));
 
 
 app.use(session({

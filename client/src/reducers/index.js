@@ -4,7 +4,7 @@ import { registration } from './registrationReducer.js';
 import { editProfile } from './editProfileReducer.js';
 import { note } from './noteReducer.js'
 import { alert } from './alertReducer.js';
-import {modal} from './modalReducer.js';
+import {postModal} from './postModalReducer.js';
 import { connectRouter } from 'connected-react-router'
 
 
@@ -13,7 +13,7 @@ export default (history)=> combineReducers({
   editProfile,
   registration,
   alert,
-  modal,
+  postModal,
   note,
 
   router:connectRouter(history)

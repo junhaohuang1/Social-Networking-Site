@@ -21,19 +21,77 @@ const updateModalInput = (key, value) => (dispatch) => (
 )
 
 
-//post method for submitting image url
-const uploadImageLink = (URL) => (dispatch) => (
-  dispatch({
-    type: "UPLOAD_IMAGE",
-    payload: axios.post('/api/imagelink', {
-      URL: URL,
-    })
-  })
-);
+export const createImagePost = (username, title, textbody, file, filetype, token) =>{
+  return (dispatch) =>{
+    return axios.post('/api/createimagepost',
+     {
+       username:username,
+       title:title,
+       textbody:textbody,
+       file:file,
+       filetype:filetype
+     },
+     {
+         headers: {
+         'authorization':token,
+         'Content-Type':'multipart/form-data'
+       }
+      }
+    )
+      .then(response =>{
+        dispatch(createPostSuccess(response.data))
+      })
+      .catch(error =>{
+        throw(error);
+      })
+
+  }
+}
+
+export const createVideoPost = (username, title, textbody, file, filetype, token) =>{
+  return (dispatch) =>{
+    return axios.post('/api/createvideopost',
+     {
+       username:username,
+       title:title,
+       textbody:textbody,
+       file:file,
+       filetype:filetype
+     },
+     {
+         headers: {
+         'authorization':token,
+         'Content-Type':'multipart/form-data'
+       }
+      }
+    )
+      .then(response =>{
+        dispatch(createPostSuccess(response.data))
+      })
+      .catch(error =>{
+        throw(error);
+      })
+
+  }
+}
+
+
+
+export const createPostSuccess =  (data) => {
+  return {
+    type: "CREATE_POST_EDIT",
+    payload: {
+      data:data
+    }
+  }
+};
+
+
 
 export const modalActions = {
   closeModal,
   openModal,
   updateModalInput,
-  uploadImageLink
+  createImagePost,
+  createVideoPost
 };
