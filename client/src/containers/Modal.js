@@ -5,12 +5,14 @@ import { connect } from 'react-redux';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Link} from 'react-router-dom';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormLabel from '@material-ui/core/FormControlLabel';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import {CountryRegionData} from 'react-country-region-selector';
 import Select from 'react-select';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 
 const customStyles = {
   content : {
@@ -87,12 +89,13 @@ class NavBarModal extends React.Component {
 
 
   selectCountry = (selectedOption) => {
-    this.props.updateSignUPForm('country', selectedOption);
+    this.props.updateModalInput('country', selectedOption);
+    this.props.updateModalInput('region', "");
     // this.props.updateSignUPForm('regionoptions', event.target.value);
   }
 
   selectRegion = selectedOption => {
-    this.props.updateSignUPForm('region', selectedOption);
+    this.props.updateModalInput('region', selectedOption);
   }
 
   render() {
@@ -132,11 +135,23 @@ class NavBarModal extends React.Component {
             />
           </div>
 
+          <div>
+          <RadioGroup
+              aria-label="Multimedia"
+              name="filetype"
+              value={this.props.filetype}
+              onChange={this.onChange}
+            >
+              <FormControlLabel value="image" control={<Radio />} label="Image" />
+              <FormControlLabel value="video" control={<Radio />} label="Video" />
+            </RadioGroup>
+          </div>
+
           <div className="field-line">
           Country
           <Select
               value={this.props.country}
-              onChange={this.props.selectCountry}
+              onChange={this.selectCountry}
               options={this.countryOptions}
           />
           </div>
@@ -152,27 +167,19 @@ class NavBarModal extends React.Component {
           />
           </div>
 
-          <FormLabel component="legend">Multimedia Type</FormLabel>
-          <RadioGroup
-            aria-label="Multimedia Type"
-            name="filetype"
-            value={this.props.filetype}
-            onChange={this.handleChange}
-          >
-            <FormControlLabel value="videoFile" control={<Radio />} label="Video" />
-            <FormControlLabel value="image" control={<Radio />} label="Image" />
-          </RadioGroup>
 
 
-          <div className="field-line">
-          Multimedia
-            <input
-              type="file"
-              name="file"
-              value={this.props.file}
-              onChange={this.props.onChange}
-            />
-          </div>
+            <div className="field-line">
+            Multimedia
+              <input
+                type="file"
+                name="file"
+                value={this.props.file}
+                onChange={this.onChange}
+              />
+            </div>
+            <br></br>
+
 
           <div className="button-line">
             <RaisedButton type="submit" label="Create Post" primary />
@@ -195,7 +202,8 @@ function mapStateToProps(state) {
     token: state.authentication.token,
     country:state.postModal.country,
     region:state.postModal.region,
-    errors:state.postModal.errors
+    errors:state.postModal.errors,
+    filetype:state.postModal.filetype
 
   }
 }

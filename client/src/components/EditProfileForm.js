@@ -98,8 +98,8 @@ EditProfileForm.propTypes = {
 	lastname:PropTypes.string.isRequired,
 	birthday:PropTypes.instanceOf(Date).isRequired,
 	privacy: PropTypes.bool.isRequired,
-  country: PropTypes.string.isRequired,
-  region: PropTypes.string.isRequired,
+  country: PropTypes.object.isRequired,
+  region: PropTypes.object.isRequired,
 };
 
 export default EditProfileForm;

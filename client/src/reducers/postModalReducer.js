@@ -8,7 +8,8 @@ const initialState = {
   errorMessage:"",
   region:"",
   country:"",
-  errors:{}
+  errors:{},
+  filetype:"image"
 }
 
 export function postModal(state = initialState, action) {

@@ -88,6 +88,7 @@ class EditProfilePage extends React.Component {
    selectCountry = (selectedOption) => {
      this.props.updateProfileForm('country', selectedOption);
      // this.props.updateSignUPForm('regionoptions', event.target.value);
+     this.props.updateProfileForm('region', '');
    }
 
    selectRegion = selectedOption => {

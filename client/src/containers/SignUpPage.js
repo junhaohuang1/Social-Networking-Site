@@ -91,6 +91,7 @@ class SignUpPage extends React.Component {
 
   selectCountry = (selectedOption) => {
     this.props.updateSignUPForm('country', selectedOption);
+    this.props.updateSignUPForm('region', "");
     // this.props.updateSignUPForm('regionoptions', event.target.value);
   }
 
@@ -128,6 +129,7 @@ class SignUpPage extends React.Component {
           country = {this.props.country}
           interest = {this.props.interest}
           privacy={this.props.privacy}
+          successMessage={this.props.successMessage}
         />
       );
   }
