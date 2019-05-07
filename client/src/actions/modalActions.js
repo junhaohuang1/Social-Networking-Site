@@ -21,24 +21,26 @@ const updateModalInput = (key, value) => (dispatch) => (
 )
 
 
-export const createImagePost = (username, title, textbody, file, filetype, token) =>{
+export const createPost = (username, title, textbody, country, region, file, filetype, token) =>{
+  var bodyFormData = new FormData();
+  bodyFormData.append('username',username)
+  bodyFormData.append('title',title)
+  bodyFormData.append('textbody',textbody)
+  bodyFormData.append('file',file)
+  bodyFormData.append('filetype',filetype)
+  bodyFormData.append('country',country)
+  bodyFormData.append('region',region)
+
   return (dispatch) =>{
-    return axios.post('/api/createimagepost',
-     {
-       username:username,
-       title:title,
-       textbody:textbody,
-       file:file,
-       filetype:filetype
-     },
-     {
-         headers: {
-         'authorization':token,
-         'Content-Type':'multipart/form-data'
-       }
+    return axios.post('/api/createpost',
+      bodyFormData,
+      {
+        headers:{
+        'authorization':token,
+        'Content-Type': 'multipart/form-data'
+        }
       }
-    )
-      .then(response =>{
+    ).then(response =>{
         dispatch(createPostSuccess(response.data))
       })
       .catch(error =>{
@@ -48,38 +50,12 @@ export const createImagePost = (username, title, textbody, file, filetype, token
   }
 }
 
-export const createVideoPost = (username, title, textbody, file, filetype, token) =>{
-  return (dispatch) =>{
-    return axios.post('/api/createvideopost',
-     {
-       username:username,
-       title:title,
-       textbody:textbody,
-       file:file,
-       filetype:filetype
-     },
-     {
-         headers: {
-         'authorization':token,
-         'Content-Type':'multipart/form-data'
-       }
-      }
-    )
-      .then(response =>{
-        dispatch(createPostSuccess(response.data))
-      })
-      .catch(error =>{
-        throw(error);
-      })
-
-  }
-}
 
 
 
 export const createPostSuccess =  (data) => {
   return {
-    type: "CREATE_POST_EDIT",
+    type: "CREATE_POST",
     payload: {
       data:data
     }
@@ -92,6 +68,5 @@ export const modalActions = {
   closeModal,
   openModal,
   updateModalInput,
-  createImagePost,
-  createVideoPost
+  createPost
 };

@@ -17,6 +17,14 @@ module.exports = function(sequelize, DataTypes){
       type: DataTypes.STRING,
       allowNull: false
     },
+    country:{
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    region:{
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     path:{
       type:DataTypes.STRING
     },

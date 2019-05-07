@@ -23,7 +23,7 @@ app.use(cors())
 // Serve up static assets
 app.use(express.static("client/build"));
 app.use(express.static("client/public"));
-app.use('/images/', express.static('/assets/uploads/'));
+
 
 
 app.use(session({

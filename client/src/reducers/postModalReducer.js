@@ -9,7 +9,7 @@ const initialState = {
   region:"",
   country:"",
   errors:{},
-  filetype:"image"
+  filetype:""
 }
 
 export function postModal(state = initialState, action) {

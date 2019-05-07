@@ -38,12 +38,13 @@ class EditProfilePage extends React.Component {
     // ('00' + this.props.birthday.getUTCMinutes()).slice(-2) + ':' +
     // ('00' + this.props.birthday.getUTCSeconds()).slice(-2);
     const privacy = this.props.privacy;
-    const city = this.props.city;
-    const interest = this.props.interest;
+    const interest = this.props.interest
+    const region = this.props.region;
+    const country = this.props.country;
     const token = this.props.token
-    if (userid && firstname && lastname && birthday && privacy && city && interest && token) {
+    if (userid && firstname && lastname && birthday && privacy && country && region && interest && token) {
 
-        this.props.editProfile(userid, firstname, lastname, city, birthday, interest, privacy, token);
+        this.props.editProfile(userid, firstname, lastname, country, region, birthday, interest, privacy, token);
     }
   }
 

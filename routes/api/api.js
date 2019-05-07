@@ -2,9 +2,20 @@ const express = require('express');
 var db = require("../../models");
 const url = require('url');
 var multer  = require('multer')
-var upload = multer({ dest: '/assets/uploads/' })
+const path = require('path');
+
+//Set Storage Engine
 
 const router = new express.Router();
+
+const storage = multer.diskStorage({
+  dest:'uploads/'
+})
+
+const upload = multer({ storage: storage })
+
+router.use(express.static('uploads'));
+
 
 router.get('/dashboard', (req, res) => {
     console.log("dashboard")
@@ -14,35 +25,21 @@ router.get('/dashboard', (req, res) => {
 });
 
 
-router.post('/createimagepost',upload.single('image'), (req, res) => {
-  // console.log(req.body);
+router.post('/createpost',upload.single('file'), (req, res) => {
   db.Post.create({
     username:req.body.username,
     title:req.body.title,
-    body:req.body.textbody,
-    path:req.file.path,
-    mimetype:req.file.mimetype,
+    textbody:req.body.textbody,
+    region: req.body.region.label,
+    country:req.body.country.label,
+    path:req.file,
+    mimetype:req.body.filetype
   }).then(function(newPost, created){
     res.status(200);
     res.end();
   })
 });
 
-router.post('/createvideopost',upload.single('videoFile'), (req, res) => {
-  // console.log(req.body);
-  db.Post.create({
-    username:req.body.username.trim(),
-    title:req.body.title.trim(),
-    body:req.body.textbody,
-    region: req.body.region.label.trim(),
-    country:req.body.country.label.trim(),
-    path:req.file.path,
-    mimetype:req.file.mimetype,
-  }).then(function(newPost, created){
-    res.status(200);
-    res.end();
-  })
-});
 
 
 

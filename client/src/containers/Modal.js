@@ -9,10 +9,10 @@ import {CountryRegionData} from 'react-country-region-selector';
 import Select from 'react-select';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Button from '@material-ui/core/Button';
+import FormGroup from '@material-ui/core/FormGroup';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
 
 const customStyles = {
   content : {
@@ -52,22 +52,18 @@ class NavBarModal extends React.Component {
     this.props.updateModalInput(name,value);
   }
 
-  onSubmit(){
+  onSubmit(event){
+    event.preventDefault();
     const username = this.props.username
     const title = this.props.title
-    const textbody = this.props.body
+    const textbody = this.props.textbody
     const file = this.props.file
     const filetype = this.props.filetype
     const token = this.props.token
     const country = this.props.country
     const region = this.props.region
     if(username && title && textbody && file && filetype && token){
-      if(filetype === 'image'){
-        this.props.createImagePost(username, title, textbody, country, region, file, filetype, token)
-      } else {
-        this.props.createVideoPost(username, title, textbody, country, region, file, filetype, token)
-      }
-
+      this.props.createPost(username, title, textbody, country, region, file, filetype, token)
     }
   }
 
@@ -86,6 +82,16 @@ class NavBarModal extends React.Component {
      CountryRegionData.map((option) => (
        {value:option, label: option[0]}
    ))
+
+
+   handleFileChange = (e) =>{
+       if (e.target.file.files.length) {
+           const upload_file = e.target.file.files[0];
+           this.props.updateModalInput('file',upload_file);
+       } else {
+           console.log('You need to select a file');
+       }
+   }
 
 
   selectCountry = (selectedOption) => {
@@ -169,16 +175,20 @@ class NavBarModal extends React.Component {
 
 
 
-            <div className="field-line">
+          <div className="field-line">
             Multimedia
-              <input
-                type="file"
-                name="file"
-                value={this.props.file}
-                onChange={this.onChange}
-              />
-            </div>
-            <br></br>
+          </div>
+          <form onSubmit={this.handleFileChange}>
+            <label>Upload File:</label>
+            <input
+              type="file"
+              name="file"
+            />
+            <button type="submit">Upload</button>
+          </form>
+
+
+          <br></br>
 
 
           <div className="button-line">
@@ -219,10 +229,7 @@ const mapDispatchToProps = dispatch => {
     updateModalInput:(key,value) =>{
       dispatch(modalActions.updateModalInput(key,value))
     },
-    createImagePost:(username, title, textbody, country, region, file, filetype, token) => {
-        dispatch(modalActions.createPost(username, title, textbody, country, region, file, filetype, token))
-    },
-    createVideoPost:(username, title, textbody, country, region, file, filetype, token) => {
+    createPost:(username, title, textbody, country, region, file, filetype, token) => {
         dispatch(modalActions.createPost(username, title, textbody, country, region, file, filetype, token))
     }
   }
