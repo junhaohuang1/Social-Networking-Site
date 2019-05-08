@@ -4,6 +4,9 @@ const url = require('url');
 var multer  = require('multer')
 const path = require('path');
 
+const {acceptFR, sendFR, rejectFR, deleteFR, listFR} = require('./db')
+
+
 //Set Storage Engine
 
 const router = new express.Router();
@@ -39,7 +42,7 @@ router.post('/createpost',upload.single('file'), (req, res) => {
     res.status(200);
     res.end();
   })
-});
+})
 
 
 
@@ -90,105 +93,95 @@ router.get('/profile/:userid', (req, res, next) => {
 });
 
 
-
-router.post('/addfriend', (req, res, next) =>{
-  console.log('adding friend');
-  // need to add a check for if friends already
-  db.friendlist.create({
-    userOneID: req.header.userOneID,
-    userTwoID: req.header.userTwoID
-  }).then(function(newFriendRelation, created){
-    console.log('friend added');
-    res.status(200);
-    res.end();
-  })
-})
-
-
-
-router.get('/findfriend', (req, res, next) => {
-  console.log("at findfriend api");
-  // console.log('req.headers.email);
-  db.User.findOne({
-    where:{
-      email:req.headers.email
-    }
-  }).then(function(dbUser){
-      if (!dbUser) {
-        console.log('couldnt find user');
-        // return res.status(401).redirect(url.format({
-        //   pathname:'/api/friendsearchresult',
-        //   query:{
-        //     "success": false,
-        //     "errorMessage": 'user not found'
-        //     }
-        //   }));
-        // return res.status(401).json({
-        //   success:false,
-        //   errors:{
-        //     message:"user not found"
-        //   }
-        // });
-        const errors = {
-          message:"User not found"
-        }
-        res.status(400);
-        res.send(errors);
-        // res.status(400).redirect(url.format({
-        //   pathname:'/api/friendsearchresult',
-        //   query:{
-        //     "success": false,
-        //     "errorMessage": 'user not found'
-        //     }
-        // }));
-        // console.log(res);
-        res.end();
-      } else {
-        console.log('found user');
-        const result = {
-          success: true,
-          userId:dbUser.id,
-          name:dbUser.name,
-          email:dbUser.email
-        }
-        // console.log('sending redirect');
-        // res.status(200).redirect(url.format({
-        //   pathname:'/api/friendsearchresult',
-        //   query:result
-        // }));
-        // console.log('sending status');
-        // res.status(200).json({
-        //   result: result
-        // });
-        res.status(200);
-        res.send(result);
-        res.end();
-      }
-      // return res.status(200).redirect(url.format({
-      //   pathname:'/api/friendsearchresult',
-      //   query:{
-      //     "success": true,
-      //     "userId": dbUser.id,
-      //     "username": dbUser.name,
-      //     "email": dbUser.email
-      //     }
-      //   }));
-        // return res.json({
-        //   success: true,
-        //   result:{
-        //     userId: dbUser.id,
-        //     username: dbUser.name,
-        //     email: dbUser.email
-        //     }
-        // })
+app.get("/getUsersbyName", (req, res) => {
+    getUsersbyName(req.body.name).then(result => {
+        res.json({
+            users:result.rows
+        })
+    }).catch(e => {
+        console.log(e);
     })
 })
 
-// router.get('/friendsearchresult', (req, res, next) => {
-//   console.log(req.query);
-//   res.send(req.query.userId);
-//   res.end();
-// })
+
+
+
+router.post("/sendFR", (req, res) => {
+    console.log("req.body.otherUserId", req.body.otherUserId);
+    sendFR(req.session.user.id, req.body.otherUserId, 1).then(result => {
+        res.json({
+            success: true,
+            status: 1,
+            receiver_id: result.rows[0].receiver_id,
+            sender_id: result.rows[0].sender_id
+        })
+    }).catch(e => {
+        console.log(e);
+    })
+})
+
+
+router.post("/acceptFR", (req, res) => {
+    console.log("req.body.otherUserId", req.body.otherUserId);
+    acceptFR(req.session.user.id, req.body.otherUserId).then(result => {
+        console.log("acceptFR results.rows", result.rows);
+        res.json({
+            success: true,
+            sender_id: result.rows[0] && result.rows[0].sender_id,
+            receiver_id: result.rows[0] && result.rows[0].receiver_id,
+            status: 2
+        })
+    }).catch(e => {
+        console.log(e);
+    })
+})
+
+router.post("/rejectFR", (req, res) => {
+    console.log("req.body.otherUserId", req.body.otherUserId);
+    rejectFR(req.session.user.id, req.body.otherUserId).then(result => {
+        console.log("rejectFR results.rows", result.rows);
+        res.json({
+            success: true,
+            sender_id: result.rows[0] && result.rows[0].sender_id,
+            receiver_id: result.rows[0] && result.rows[0].receiver_id,
+            status: 5
+        })
+    }).catch(e => {
+        console.log(e);
+    })
+})
+
+router.post("/deleteFR", (req, res) => {
+    console.log("req.body.otherUserId", req.body.otherUserId);
+    deleteFR(req.session.user.id, req.body.otherUserId).then(result => {
+        console.log("deleteFR results.rows", result.rows);
+        res.json({
+            success: true,
+            sender_id: result.rows[0] && result.rows[0].sender_id,
+            receiver_id: result.rows[0] && result.rows[0].receiver_id,
+            status: 4
+        })
+    }).catch(e => {
+        console.log(e);
+    })
+})
+
+
+router.get("/listFR", (req, res) => {
+    listFR(req.session.user.id).then(result => {
+        console.log("listFR results.rows", result.rows);
+        res.json({
+            success: true,
+            users: result.rows,
+            loggedUser: req.session.user.id
+        })
+    }).catch(e => {
+        console.log(e);
+    })
+})
+
+
+
 
 
 module.exports = router;

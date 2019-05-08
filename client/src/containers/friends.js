@@ -1,17 +1,16 @@
 import React from 'react';
-import axios from 'axios';
+import axios from './axios';
 import { connect } from 'react-redux';
-import { receiveFRList, unfriend, acceptFR } from '../actions/userActions';
+import { receiveFRList, unfriend, acceptFR } from './actions';
 import {Link} from 'react-router-dom'
 
 
 function mapStateToProps(state) {
-    var logged = state.authentication.id;
-
+    var logged = state.userId;
+    console.log(state);
     return {
-        friends: state.friendship.friendsAndWannabes && state.friendship.friendsAndWannabes.filter(user => user.status == 2),
-        wannabes: state.friendship.friendsAndWannabes && state.friendship.friendsAndWannabes.filter(user => (user.status == 1 && user.sender_id != logged)),
-        token:state.authentication.token
+        friends: state.friendsAndWannabes && state.friendsAndWannabes.filter(user => user.status == 2),
+        wannabes: state.friendsAndWannabes && state.friendsAndWannabes.filter(user => (user.status == 1 && user.sender_id != logged))
     }
 }
 
@@ -25,7 +24,7 @@ class Friends extends React.Component {
     }
 
     componentDidMount() {
-        this.props.dispatch(receiveFRList(this.props.token));
+        this.props.dispatch(receiveFRList());
     }
 
     render () {
@@ -40,12 +39,16 @@ class Friends extends React.Component {
                     {this.props.wannabes.map(wannabe => {
                         return (
                             <div key={wannabe.id} className="wannabe">
+                                <Link to={`/user/${wannabe.id}`}>
+                                    {wannabe.img && <img src={wannabe.img} />}
+                                    {!wannabe.img && <img src="/kitty3.gif" />}
+                                </Link>
                                 <div className="friends-right">
                                     <div className="friends-name">
                                         {wannabe.first} {wannabe.last}
                                     </div>
                                     <button className="frbtn" onClick={ () =>
-                                        this.props.dispatch(acceptFR(wannabe.id, this.props.token))}>Accept</button>
+                                        this.props.dispatch(acceptFR(wannabe.id))}>Accept</button>
                                 </div>
                             </div>
                         )
@@ -57,12 +60,16 @@ class Friends extends React.Component {
                     {this.props.friends.map(friend => {
                         return (
                             <div key={friend.id} className="friend">
+                                <Link to={`/user/${friend.id}`}>
+                                    {friend.img && <img src={friend.img} />}
+                                    {!friend.img && <img src="/kitty3.gif" />}
+                                </Link>
                                 <div className="friends-right">
                                     <div className="friends-name">
                                         {friend.first} {friend.last}
                                     </div>
                                     <button className="frbtn" onClick={ () =>
-                                        this.props.dispatch(unfriend(friend.id, this.props.token))}>Unfriend</button>
+                                        this.props.dispatch(unfriend(friend.id))}>Unfriend</button>
                                 </div>
                             </div>
                         )

@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import axios from './axios';
 
 export default class FriendButton extends React.Component {
     constructor(props) {
@@ -9,36 +9,18 @@ export default class FriendButton extends React.Component {
             status: this.props.status
         };
         this.sendFR = this.sendFR.bind(this);
+        this.cancelFR = this.cancelFR.bind(this);
         this.acceptFR = this.acceptFR.bind(this);
         this.rejectFR = this.rejectFR.bind(this);
         this.deleteFR = this.deleteFR.bind(this);
     }
 
-    componentDidMount() {
-        axios
-        .get('/seeFR/' + this.props.otherUserId)
-        .then (resp => {
-            console.log("resp axios get seeFR", resp);
-            if(resp.data.success) {
-                console.log("success!");
-                this.setState({
-                    status: resp.data.status,
-                    sender_id: resp.data.sender_id,
-                    receiver_id: resp.data.receiver_id
-                });
-                console.log('status ', resp.data.status);
-            } else {
-                this.setState({
-                    error: resp.data.error
-                });
-            }
-        })
-    }
-
     sendFR() {
         console.log("this.props.otherUserId", this.props.otherUserId);
-        axios.post('/sendFR', {
-            otherUserId: this.props.otherUserId
+        axios
+        .post('/sendFR', {
+            otherUserId: this.props.otherUserId,
+            token:this.props.token
         })
         .then (resp => {
             console.log("resp axios post sendFR", resp);
@@ -57,10 +39,12 @@ export default class FriendButton extends React.Component {
         })
     }
 
+
     acceptFR() {
         axios
         .post('/acceptFR', {
-            otherUserId: this.props.otherUserId
+            otherUserId: this.props.otherUserId,
+            token:this.props.token
         })
         .then (resp => {
             console.log("resp axios post acceptFR", resp);
@@ -82,7 +66,8 @@ export default class FriendButton extends React.Component {
     rejectFR() {
         axios
         .post('/rejectFR', {
-            otherUserId: this.props.otherUserId
+            otherUserId: this.props.otherUserId,
+            token:this.props.token
         })
         .then (resp => {
             console.log("resp axios post rejectFR", resp);
@@ -105,7 +90,8 @@ export default class FriendButton extends React.Component {
     deleteFR() {
         axios
         .post('/deleteFR', {
-            otherUserId: this.props.otherUserId
+            otherUserId: this.props.otherUserId,
+            token:this.props.token
         })
         .then (resp => {
             console.log("resp axios post deleteFR", resp);
@@ -129,7 +115,7 @@ export default class FriendButton extends React.Component {
         console.log("this.state", this.state)
         return (
             <div>
-                {(!this.state.status || this.state.status == 3 || this.state.status == 4 || this.state.status == 5) && <button className="frbtn" onClick={this.sendFR}>Send Friend Request</button>
+                {(!this.state.status || this.state.status == 4 || this.state.status == 5) && <button className="frbtn" onClick={this.sendFR}>Send Friend Request</button>
                 || ((this.state.status == 1 && this.state.sender_id == this.props.otherUserId) && <button className="frbtn" onClick={this.acceptFR}>Accept Friend Request</button>)
                 || ((this.state.status == 1 && this.state.sender_id != this.props.otherUserId) && <button className="frbtn" onClick={this.cancelFR}>Cancel Friend Request</button>)
                 || (this.state.status == 2 && <button className="frbtn" onClick={this.deleteFR}>Unfriend</button>)

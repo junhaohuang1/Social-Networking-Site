@@ -1,8 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-export default class UserSearch extends React.Component {
+class UserSearch extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -15,7 +16,6 @@ export default class UserSearch extends React.Component {
         axios
         .get('/getUsersbyName', {
             first: this.name,
-            last: this.name
         })
         .then (resp => {
             console.log("resp axios userSearch", resp);
@@ -40,3 +40,13 @@ export default class UserSearch extends React.Component {
         );
     }
 }
+
+function mapStateToProps(state) {
+  return {
+    token: state.authentication.token,
+    userid: state.authentication.id
+  }
+}
+
+
+export default connect(mapStateToProps)(UserSearch)

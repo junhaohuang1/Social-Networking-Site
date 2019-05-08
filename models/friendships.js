@@ -1,21 +1,22 @@
 module.exports = function(sequelize, DataTypes){
-  var friendslist = sequelize.define('Friendslist', {
+  var friendships = sequelize.define('friendships', {
     id:{
       type: DataTypes.INTEGER, // All dataTypes format available here http://bit.ly/2ofwgAm
       primaryKey: true,
       autoIncrement: true
     },
-    userOneID:{
+    sender_id:{
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    userTwoID:{
+    receiver_id:{
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    dateEstablished:{
-      type:DataTypes.DATE
+    status:{
+      type:DataTypes.INTEGER,
+      allowNull:false
     }
   });
-  return friendslist;
+  return friendships;
 }
