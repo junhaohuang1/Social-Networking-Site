@@ -9,12 +9,12 @@ const path = require('path');
 const router = new express.Router();
 
 const storage = multer.diskStorage({
-  dest:'uploads/'
+  destination: __dirname + '/uploads'
 })
 
 const upload = multer({ storage: storage })
 
-router.use(express.static('uploads'));
+router.use('/files/',express.static('uploads'));
 
 
 router.get('/dashboard', (req, res) => {
@@ -26,13 +26,14 @@ router.get('/dashboard', (req, res) => {
 
 
 router.post('/createpost',upload.single('file'), (req, res) => {
+  console.log(req.file)
   db.Post.create({
     username:req.body.username,
     title:req.body.title,
     textbody:req.body.textbody,
-    region: req.body.region.label,
-    country:req.body.country.label,
-    path:req.file,
+    region: req.body.region,
+    country:req.body.country,
+    path:req.file.filename,
     mimetype:req.body.filetype
   }).then(function(newPost, created){
     res.status(200);

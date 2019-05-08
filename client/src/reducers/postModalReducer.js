@@ -29,16 +29,18 @@ export function postModal(state = initialState, action) {
       ...state,
       [action.key]: action.value
     };
-    case "CREATE_POST_PENDING":
-    return {
-      ...state,
-      uploading: true
-    };
-    case "CREATE_POST_FULFILLED":
+    case "CREATE_POST_SUCCESS":
     return {
       ...state,
       uploading: false,
-      uploaded: true
+      uploaded: true,
+      region:"",
+      country:"",
+      errors:{},
+      filetype:"",
+      title:"",
+      textbody:"",
+      file:"",
     };
     case "CREATE_POST_REJECTED":
     return {

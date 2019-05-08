@@ -55,7 +55,7 @@ export const createPost = (username, title, textbody, country, region, file, fil
 
 export const createPostSuccess =  (data) => {
   return {
-    type: "CREATE_POST",
+    type: "CREATE_POST_SUCCESS",
     payload: {
       data:data
     }

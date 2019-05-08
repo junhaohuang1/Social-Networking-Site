@@ -60,8 +60,8 @@ class NavBarModal extends React.Component {
     const file = this.props.file
     const filetype = this.props.filetype
     const token = this.props.token
-    const country = this.props.country
-    const region = this.props.region
+    const country = this.props.country.label
+    const region = this.props.region.label
     if(username && title && textbody && file && filetype && token){
       this.props.createPost(username, title, textbody, country, region, file, filetype, token)
     }
@@ -85,6 +85,7 @@ class NavBarModal extends React.Component {
 
 
    handleFileChange = (e) =>{
+     e.preventDefault()
        if (e.target.file.files.length) {
            const upload_file = e.target.file.files[0];
            this.props.updateModalInput('file',upload_file);
@@ -117,6 +118,18 @@ class NavBarModal extends React.Component {
 
           <h2 ref={subtitle => this.subtitle = subtitle}>Create Post</h2>
           <button onClick={this.props.closeModal}>close</button>
+
+
+          <form onSubmit={this.handleFileChange}>
+            <label>Upload Multimedia File:</label>
+            <input
+              type="file"
+              name="file"
+            />
+            <button type="submit">Upload</button>
+          </form>
+
+
           <form action ='/' onSubmit={this.onSubmit}>
 
           <div className="field-line">
@@ -172,20 +185,6 @@ class NavBarModal extends React.Component {
               ))}
           />
           </div>
-
-
-
-          <div className="field-line">
-            Multimedia
-          </div>
-          <form onSubmit={this.handleFileChange}>
-            <label>Upload File:</label>
-            <input
-              type="file"
-              name="file"
-            />
-            <button type="submit">Upload</button>
-          </form>
 
 
           <br></br>
