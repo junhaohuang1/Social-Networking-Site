@@ -96,7 +96,7 @@ EditProfileForm.propTypes = {
 	onChange: PropTypes.func.isRequired,
 	firstname:PropTypes.string.isRequired,
 	lastname:PropTypes.string.isRequired,
-	birthday:PropTypes.instanceOf(Date).isRequired,
+	birthday:PropTypes.string.isRequired,
 	privacy: PropTypes.bool.isRequired,
   country: PropTypes.object.isRequired,
   region: PropTypes.object.isRequired,

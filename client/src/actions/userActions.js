@@ -34,6 +34,22 @@ export async function acceptFR(id, token) {
     };
 }
 
+
+const searchFriend = (userid, searchedName, token) => (dispatch) => (
+  dispatch({
+    type: "FRIEND_SEARCH",
+    payload: axios.get('/api/findfriend', {
+      headers:{
+        authorization:token,
+        searchedName: searchedName,
+        userid:userid,
+      }
+    })
+  })
+);
+
+
+
 export async function unfriend(id, token) {
     const { data } = await axios.post('/deleteFR',
     {
@@ -172,6 +188,7 @@ export const userActions = {
     getProfile,
     editProfile,
     editProfileSuccess,
+    searchFriend,
     updateSignInForm,
     updateSignUPForm,
     updateProfileForm

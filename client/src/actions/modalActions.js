@@ -20,6 +20,27 @@ const updateModalInput = (key, value) => (dispatch) => (
   })
 )
 
+const openFriendSearchResultModal = () => (dispatch) => (
+  dispatch({
+      type: "FRIEND_SEARCH_RESULT_MODAL_OPEN",
+  })
+)
+
+
+const closeFriendSearchResultModal = () => (dispatch) => (
+  dispatch({
+      type: "FRIEND_SEARCH_RESULT_MODAL_CLOSE",
+  })
+)
+
+const updateFriendQuery = (key, value) => (dispatch) => (
+  dispatch({
+      type: "FRIEND_QUERY_UPDATE_VALUE_FULFILLED",
+      key, value
+  })
+)
+
+
 
 export const createPost = (username, title, textbody, country, region, file, filetype, token) =>{
   var bodyFormData = new FormData();
@@ -68,5 +89,8 @@ export const modalActions = {
   closeModal,
   openModal,
   updateModalInput,
-  createPost
+  createPost,
+  openFriendSearchResultModal,
+  closeFriendSearchResultModal,
+  updateFriendQuery
 };

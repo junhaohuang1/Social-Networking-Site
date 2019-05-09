@@ -11,7 +11,7 @@ import { connectRouter } from 'connected-react-router'
 
 export default (history)=> combineReducers({
   authentication,
-  friendship
+  friendship,
   editProfile,
   registration,
   alert,

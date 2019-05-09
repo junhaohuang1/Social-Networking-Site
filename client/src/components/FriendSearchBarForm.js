@@ -12,10 +12,10 @@ const FriendSearchBarForm = (props) => (
       <div className="field-line" style = {{flex:1, height: 62}}>
         <TextField
           style={{height: 62}}
-          floatingLabelText="Search Friend Here By Name"
-          name="name"
+          floatingLabelText="Search Friend Here By Username"
+          name="searchedName"
           onChange={props.onChange}
-          value={props.name}
+          value={props.searchedName}
         />
       </div>
 
@@ -30,8 +30,7 @@ const FriendSearchBarForm = (props) => (
 FriendSearchBarForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  successMessage: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired,
+  searchedName: PropTypes.string.isRequired,
 };
 
 export default FriendSearchBarForm;

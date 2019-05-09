@@ -9,7 +9,7 @@ var db = mysql.createConnection({
 db.connect();
 
 exports.sendFR = (sender_id, receiver_id, status) => {
-    return db.query('INSERT INTO friendships (sender_id, receiver_id, status) VALUES (?,?,?) RETURNING *', [sender_id, receiver_id, status])
+    return db.query('INSERT INTO friendships (sender_id, receiver_id, status) VALUES (?,?,?)', [sender_id, receiver_id, status])
 }
 
 
@@ -38,9 +38,9 @@ exports.deleteFR = (sender_id, receiver_id) => {
                     OR (sender_id = ? AND receiver_id = ?))`, [sender_id, receiver_id, receiver_id, sender_id])
 }
 
-exports.getUsersbyName = (name) => {
-    return db.query('SELECT * FROM users WHERE first ILIKE '%?%' OR username ILIKE '%?%'', [name, name])
-}
+// exports.getUsersbyName = (name) => {
+//     return db.query('SELECT * FROM users WHERE first ILIKE '%?%' OR username ILIKE '%?%'', [name, name])
+// }
 
 exports.listFR = (id) => {
     return db.query(`

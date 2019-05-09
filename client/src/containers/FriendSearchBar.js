@@ -1,15 +1,15 @@
 import React from 'react';
 import FriendSearchBarForm from '../components/FriendSearchBarForm.js';
-import { userActions } from '../actions';
+import { userActions,modalActions } from '../actions';
 import { connect } from 'react-redux';
 // import { push } from 'react-router-redux';
 // import {store} from "../store.js";
 import {withRouter} from "react-router-dom";
 import Modal from 'react-modal';
-import { modalActions } from '../actions';
 import { Card } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios'
+import FriendButton from './friendbutton.js'
 
 
 const customStyles = {
@@ -40,7 +40,6 @@ class FriendSearchBar extends React.Component {
     this.closeModal = this.props.closeModal.bind(this);
     this.processForm = this.processForm.bind(this);
     this.changeUser = this.changeUser.bind(this);
-    this.sendFR = this.sendFR.bind(this);
 
     this.state = {
         userSearchedId:"",
@@ -54,10 +53,10 @@ class FriendSearchBar extends React.Component {
     Modal.setAppElement('body');
   }
 
-  addFriend(event){
-    event.preventDefault();
-    this.props.addFriend(this.props.currentUserID, this.props.userSearchedId, this.props.token)
-  }
+  // addFriend(event){
+  //   event.preventDefault();
+  //   this.props.addFriend(this.props.currentUserID, this.props.userSearchedId, this.props.token)
+  // }
 
   afterOpenModal() {
     // references are now sync'd and can be accessed.
@@ -73,41 +72,14 @@ class FriendSearchBar extends React.Component {
     event.preventDefault();
 
     // create a string for an HTTP body message
-    const email = this.props.email;
-    console.log(email);
-    if (email) {
-      console.log(email);
-      this.sendFR();
+    const searchedName = this.props.searchedName;
+    console.log(searchedName);
+    if (searchedName) {
+      this.props.searchFriend(this.props.userid, searchedName, this.props.token);
       this.props.openModal();
     }
   }
 
-
-  sendFR() {
-      console.log("this.props.otherUserId", this.props.otherUserId);
-      axios
-      .post('/sendFR', {
-          otherUserId: this.props.otherUserId,
-          headers:{
-            token:this.props.token
-          }
-      })
-      .then (resp => {
-          console.log("resp axios post sendFR", resp);
-          if(resp.data.success) {
-              console.log("success!");
-              this.setState({
-                  status: resp.data.status,
-                  receiver_id: resp.data.receiver_id,
-                  sender_id: resp.data.sender_id
-              });
-          } else {
-              this.setState({
-                  error: resp.data.error
-              });
-          }
-      })
-  }
 
 
   /**
@@ -132,7 +104,7 @@ class FriendSearchBar extends React.Component {
           onChange={this.changeUser}
           // errors={this.props.errors}
           // successMessage={this.props.successMessage}
-          name={this.props.name}
+          searchedName={this.props.searchedName}
           // password={this.props.password}
         />
         <Modal
@@ -145,21 +117,23 @@ class FriendSearchBar extends React.Component {
           <button onClick={this.props.closeModal}>close</button>
           {this.props.searched && this.props.searchingSuccess ? (
             <Card className = "container">
-              <form action ="/" onSubmit={this.sendFR} style={{display:"flex"}}>
-                <Card className = "container" style={{display:"flex"}}>
+                <Card id={this.props.searchedId} className = "container" style={{display:"flex"}}>
                   <label>
-                    Username:{this.props.userSearchedName}
+                    First Name:{this.props.searchedFirstName}
                   </label>
                   <br>
                   </br>
+
                   <label>
-                    currentUserID:{this.props.currentUserID}
+                    Last Name:{this.props.searchedLastName}
                   </label>
                   <br>
                   </br>
+
+                  <br>
+                  </br>
+                  <FriendButton/>
                 </Card>
-                  <RaisedButton style = {{flex:1,height: 63}} type="submit" label="Add Friend" primary />
-              </form>
             </Card>
           ): (
             <label>
@@ -176,16 +150,18 @@ class FriendSearchBar extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    modalIsOpen: state.modal.friendModalOpen,
-    searching: state.friendslist.searching,
-    searched: state.friendslist.searched,
-    errors: state.friendslist.errors,
+    modalIsOpen: state.friendship.friendModalOpen,
+    searching: state.friendship.searching,
+    searched: state.friendship.searched,
+    errors: state.friendship.errors,
     token: state.authentication.token,
-    userSearchedId:state.friendslist.userSearchedId,
-    userSearchedName:state.friendslist.userSearchedName,
-    searchingSuccess:state.friendslist.searchingSuccess,
-    errorMessage:state.friendslist.errors,
-    currentUserID: state.authentication.id,
+    searchedId:state.friendship.searchedId,
+    searchedFirstName:state.friendship.searchedFirstName,
+    searchedLastName:state.friendship.searchedLastName,
+    searchedName:state.friendship.searchedName,
+    searchingSuccess:state.friendship.searchingSuccess,
+    errorMessage:state.friendship.errors,
+    userid: state.authentication.id
   }
 }
 
@@ -198,7 +174,10 @@ const mapDispatchToProps = dispatch => {
       dispatch(modalActions.closeFriendSearchResultModal())
     },
     updateFriendQuery:(key, value) =>{
-      dispatch(userActions.updateFriendQuery(key, value))
+      dispatch(modalActions.updateFriendQuery(key, value))
+    },
+    searchFriend:(userid, searchedName, token) =>{
+      dispatch(userActions.searchFriend(userid, searchedName, token))
     }
   }
 }

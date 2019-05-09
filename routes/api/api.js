@@ -3,6 +3,9 @@ var db = require("../../models");
 const url = require('url');
 var multer  = require('multer')
 const path = require('path');
+const Sequelize = require('sequelize');
+const op = Sequelize.Op;
+
 
 const {acceptFR, sendFR, rejectFR, deleteFR, listFR} = require('./db')
 
@@ -93,37 +96,60 @@ router.get('/profile/:userid', (req, res, next) => {
 });
 
 
-app.get("/getUsersbyName", (req, res) => {
-    getUsersbyName(req.body.name).then(result => {
-        res.json({
-            users:result.rows
-        })
-    }).catch(e => {
-        console.log(e);
-    })
-})
+// app.get("/getUsersbyName", (req, res) => {
+//     getUsersbyName(req.body.name).then(result => {
+//         res.json({
+//             users:result.rows
+//         })
+//     }).catch(e => {
+//         console.log(e);
+//     })
+// })
 
 
 
 
 router.post("/sendFR", (req, res) => {
     console.log("req.body.otherUserId", req.body.otherUserId);
-    sendFR(req.session.user.id, req.body.otherUserId, 1).then(result => {
-        res.json({
-            success: true,
-            status: 1,
-            receiver_id: result.rows[0].receiver_id,
-            sender_id: result.rows[0].sender_id
-        })
-    }).catch(e => {
-        console.log(e);
+
+    db.friendships.create({
+      sender_id:req.body.userid,
+      receiver_id:req.body.otherUserId,
+      status:1
+    }).then(function(newFriendship, created){
+      console.log('friendship sender '+newFriendship.sender_id)
+      res.json({
+        success:true,
+        status:1,
+        receiver_id:newFriendship.receiver_id,
+        sender_id:newFriendship.sender_id
+      })
+      res.status(200);
+      res.end();
+    }).catch(e=>{
+      console.log(e)
     })
+
+    //
+    //
+    //
+    //
+    // sendFR(req.body.userid, req.body.otherUserId, 1).then(result => {
+    //     res.json({
+    //         success: true,
+    //         status: 1,
+    //         receiver_id: result.rows[0].receiver_id,
+    //         sender_id: result.rows[0].sender_id
+    //     })
+    // }).catch(e => {
+    //     console.log(e);
+    // })
 })
 
 
 router.post("/acceptFR", (req, res) => {
     console.log("req.body.otherUserId", req.body.otherUserId);
-    acceptFR(req.session.user.id, req.body.otherUserId).then(result => {
+    acceptFR(req.body.userid, req.body.otherUserId).then(result => {
         console.log("acceptFR results.rows", result.rows);
         res.json({
             success: true,
@@ -138,7 +164,7 @@ router.post("/acceptFR", (req, res) => {
 
 router.post("/rejectFR", (req, res) => {
     console.log("req.body.otherUserId", req.body.otherUserId);
-    rejectFR(req.session.user.id, req.body.otherUserId).then(result => {
+    rejectFR(req.body.userid, req.body.otherUserId).then(result => {
         console.log("rejectFR results.rows", result.rows);
         res.json({
             success: true,
@@ -153,7 +179,7 @@ router.post("/rejectFR", (req, res) => {
 
 router.post("/deleteFR", (req, res) => {
     console.log("req.body.otherUserId", req.body.otherUserId);
-    deleteFR(req.session.user.id, req.body.otherUserId).then(result => {
+    deleteFR(req.body.userid, req.body.otherUserId).then(result => {
         console.log("deleteFR results.rows", result.rows);
         res.json({
             success: true,
@@ -179,6 +205,61 @@ router.get("/listFR", (req, res) => {
         console.log(e);
     })
 })
+
+router.get('/findfriend', (req, res, next) => {
+  // console.log("at findfriend api");
+  db.User.findOne({
+    where:{
+      username:req.headers.searchedname
+    }
+  }).then(function(dbUser){
+      if (!dbUser) {
+        console.log('couldnt find user');
+        const errors = {
+          message:"User not found"
+        }
+        res.status(400);
+        res.send(errors);
+        res.end();
+      } else {
+        console.log('found user');
+        console.log(req.headers.userid);
+        db.friendships.findOne({
+            where:{
+              [op.or]: [{receiver_id: dbUser.id, sender_id:req.headers.userid}, {receiver_id:req.headers.userid,sender_id: dbUser.id}]
+            }
+        }).then(function(friendship){
+          console.log('not a friend yet')
+          if(!friendship){
+            result = {
+             success: true,
+             userId:dbUser.id,
+             name:dbUser.username,
+             firstname:dbUser.firstname,
+             lastname:dbUser.lastname,
+           }
+           res.status(200);
+           res.send(result);
+           res.end();
+         } else {
+           console.log('found something in the friendship table')
+           result = {
+            success: true,
+            userId:dbUser.id,
+            name:dbUser.username,
+            firstname:dbUser.firstname,
+            lastname:dbUser.lastname,
+            status:friendship.status
+          }
+          res.status(200);
+          res.send(result);
+          res.end();
+          }
+        })
+      }
+    })
+})
+
 
 
 
