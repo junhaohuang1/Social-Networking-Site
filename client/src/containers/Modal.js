@@ -122,6 +122,7 @@ class NavBarModal extends React.Component {
             <input
               type="file"
               name="file"
+              accept="image/*,video/*"
             />
             <button type="submit">Upload</button>
           </form>
@@ -151,17 +152,6 @@ class NavBarModal extends React.Component {
             />
           </div>
 
-          <div>
-          <RadioGroup
-              aria-label="Multimedia"
-              name="filetype"
-              value={this.props.filetype}
-              onChange={this.onChange}
-            >
-              <FormControlLabel value="image" control={<Radio />} label="Image" />
-              <FormControlLabel value="video" control={<Radio />} label="Video" />
-            </RadioGroup>
-          </div>
 
           <div className="field-line">
           Country

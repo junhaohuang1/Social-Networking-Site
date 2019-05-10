@@ -55,7 +55,7 @@ class EditProfilePage extends React.Component {
    * @param {object} event - the JavaScript event object
    */
 
-  componentWillUnmount() {
+  componentDidMount() {
     this.props.getProfile(this.props.userid, this.props.token)
   }
 

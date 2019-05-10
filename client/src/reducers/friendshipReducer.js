@@ -65,9 +65,8 @@ action) {
       searchedName:""
     };
   }
-  if(action.type === 'RECEIVE_FRIENDS_WANNABES') {
-        let loggedUserId = action.loggedUser
-        return { ...state, friendsAndWannabes: action.users, loggedUserId}
+  if(action.type === 'RECEIVE_FRIENDS_WANNABES_FULFILLED') {
+        return { ...state, friendsAndWannabes: action.payload.data.users}
     }
 
   if(action.type === 'ACCEPT_FRIEND_REQUEST') {

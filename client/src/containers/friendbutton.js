@@ -108,10 +108,7 @@ class FriendButton extends React.Component {
             console.log("resp axios post rejectFR", resp);
             if(resp.data.success) {
                 console.log("success!");
-                console.log("resp.data.id", resp.data.id);
-                this.props.updateFriendQuery('status', resp.data.status)
-                this.props.updateFriendQuery('receiver_id', resp.data.receiver_id)
-                this.props.updateFriendQuery('sender_id', resp.data.sender_id)
+                this.props.updateFriendQuery('status', 5)
             } else {
                 this.setState({
                     error: resp.data.error
@@ -137,10 +134,7 @@ class FriendButton extends React.Component {
             console.log("resp axios post deleteFR", resp);
             if(resp.data.success) {
                 console.log("success!");
-                console.log("resp.data.id", resp.data.id);
-                this.props.updateFriendQuery('status', resp.data.status)
-                this.props.updateFriendQuery('receiver_id', resp.data.receiver_id)
-                this.props.updateFriendQuery('sender_id', resp.data.sender_id)
+                this.props.updateFriendQuery('status', 4)
             } else {
                 this.setState({
                     error: resp.data.error
@@ -155,7 +149,7 @@ class FriendButton extends React.Component {
       console.log('other id is ' + this.props.otherUserId)
         return (
           <div>
-          {(this.props.otherUserId === this.props.userid && <div>You found yourself!</div>) || (!this.props.status) && <button className="frbtn" onClick={this.sendFR}>Send Friend Request</button>
+          {(this.props.otherUserId === this.props.userid && <div>You found yourself!</div>) || ((!this.props.status || this.props.status === 3 || this.props.status === 4 || this.props.status === 5) && <button className="frbtn" onClick={this.sendFR}>Send Friend Request</button>)
           || ((this.props.status === 1 && this.props.sender_id === this.props.otherUserId) && <div> <button className="frbtn" onClick={this.acceptFR}>Accept Friend Request</button> <br></br> <button className="frbtn" onClick={this.rejectFR}>Reject Friend Request</button></div>)
           || ((this.props.status === 1 && this.props.sender_id !== this.props.otherUserId) && <div>Friend Request Sent</div>)
           || (this.props.status === 2 && <button className="frbtn" onClick={this.deleteFR}>Unfriend</button>)

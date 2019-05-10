@@ -10,6 +10,23 @@ const op = Sequelize.Op;
 const {acceptFR, sendFR, rejectFR, deleteFR, listFR} = require('./db')
 
 
+var mysql      = require('mysql');
+var connection = mysql.createConnection({
+  host     : '127.0.0.1',
+  user     : 'root',
+  password : 'password',
+  database : '6083project'
+});
+
+
+connection.connect(function(err) {
+  if (err) {
+    return console.error('error: ' + err.message);
+  }
+
+  console.log('Connected to the MySQL server.');
+});
+
 //Set Storage Engine
 
 const router = new express.Router();
@@ -40,7 +57,7 @@ router.post('/createpost',upload.single('file'), (req, res) => {
     region: req.body.region,
     country:req.body.country,
     path:req.file.filename,
-    mimetype:req.body.filetype
+    mimetype:req.file.mime
   }).then(function(newPost, created){
     res.status(200);
     res.end();
@@ -148,86 +165,93 @@ router.post("/sendFR", (req, res) => {
 
 
 router.post("/acceptFR", (req, res, next) => {
-    // console.log("req.body.otherUserId", req.body.otherUserId);
-    // console.log("req.body.userid", req.body.userid);
-    //   db.friendships.update(
-    //     {
-    //       status:2
-    //     },
-    //     {
-    //       where:{
-    //         status:1,
-    //         [op.or]: [{receiver_id: req.body.otherUserId, sender_id:req.body.userid}, {receiver_id:req.body.userid, sender_id: req.body.otherUserId}]
-    //       },
-    //       returning: true
-    //     }
-    //   ).then(function([ rowsUpdate, [updatedFriendShip] ]){
-    //     res.status(200).json({
-    //       updatedFriendShip
-    //     });
-    //   }).catch(next)
-
-    acceptFR(req.body.userid, req.body.otherUserId).then(result => {
-        console.log("acceptFR results.rows", results);
-        res.json({
-            success: true,
-            sender_id: results[0] && results[0].sender_id,
-            receiver_id: results[0] && results[0].receiver_id,
-            status: 2
+    console.log("req.body.otherUserId", req.body.otherUserId);
+    console.log("req.body.userid", req.body.userid);
+      db.friendships.update(
+        {
+          status:2
+        },
+        {
+          where:{
+            status:1,
+            [op.or]: [{receiver_id: req.body.otherUserId, sender_id:req.body.userid}, {receiver_id:req.body.userid, sender_id: req.body.otherUserId}]
+          },
+          returning: true
+        }
+      ).then(function(rowsUpdated){
+        db.friendships.findOne({
+            where:{
+              status:2,
+              [op.or]: [{receiver_id: req.body.otherUserId, sender_id:req.body.userid}, {receiver_id:req.body.userid, sender_id: req.body.otherUserId}]
+            }
+        }).then(function(friendship){
+          console.log(friendship)
+          res.status(200).json({
+            success:true,
+            status:friendship.status,
+            receiver_id:friendship.receiver_id,
+            sender_id:friendship.sender_id
+          })
+        }).catch(e =>{
+          console.log(e)
         })
-    }).catch(e => {
-        console.log(e);
-    })
-})
+      }).catch(next)
+});
+
 
 router.post("/rejectFR", (req, res) => {
-    console.log("req.body.otherUserId", req.body.otherUserId);
-    rejectFR(req.body.userid, req.body.otherUserId).then(result => {
-        console.log("rejectFR results.rows", result.rows);
-        res.json({
-            success: true,
-            sender_id: result.rows[0] && result.rows[0].sender_id,
-            receiver_id: result.rows[0] && result.rows[0].receiver_id,
-            status: 5
-        })
-    }).catch(e => {
-        console.log(e);
+  db.friendships.destroy(
+    {
+      where:{
+        status:1,
+        [op.or]: [{receiver_id: req.body.otherUserId, sender_id:req.body.userid}, {receiver_id:req.body.userid, sender_id: req.body.otherUserId}]
+      },
+      returning: true
+    }).then(function(rowsUpdated){
+      res.status(200).json({
+        success:true,
+        status:5
     })
+  })
 })
 
 router.post("/deleteFR", (req, res, next) => {
-  console.log("req.body.userid", req.body.userid);
-    console.log("req.body.otherUserId", req.body.otherUserId);
-    db.friendships.update(
-      {
-        status:4
+  db.friendships.destroy(
+    {
+      where:{
+        status:2,
+        [op.or]: [{receiver_id: req.body.otherUserId, sender_id:req.body.userid}, {receiver_id:req.body.userid, sender_id: req.body.otherUserId}]
       },
-      {
-        where:{
-          status:2,
-          [op.or]: [{receiver_id: req.body.otherUserId, sender_id:req.body.userid}, {receiver_id:req.body.userid, sender_id: req.body.otherUserId}]
-        },
-        returning: true
-      }
-    ).then(function(rowsUpdated){
+      returning: true
+  }).then(function(rowsUpdated){
       res.status(200).json({
-        rowsUpdated
-      });
-    }).catch(next)
+        success:true,
+        status:4
+      })
+  }).catch(next)
 })
 
 
 router.get("/listFR", (req, res) => {
-    listFR(req.session.user.id).then(result => {
-        console.log("listFR results.rows", result.rows);
-        res.json({
-            success: true,
-            users: result.rows,
-            loggedUser: req.session.user.id
-        })
-    }).catch(e => {
-        console.log(e);
+    // listFR(req.session.user.id).then(result => {
+    //     console.log("listFR results.rows", result.rows);
+    //     res.json({
+    //         success: true,
+    //         users: result.rows,
+    //         loggedUser: req.session.user.id
+    //     })
+    // }).catch(e => {
+    //     console.log(e);
+    // })
+
+    console.log(req.headers.userid)
+    connection.query('CALL listFR(?);',[req.headers.userid], function(error, results, fields) {
+    if (error) throw error;
+    console.log(results)
+    res.status(200).json({
+      users:results[0]
     })
+  })
 })
 
 router.get('/findfriend', (req, res, next) => {
