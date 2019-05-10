@@ -121,6 +121,7 @@ class FriendButton extends React.Component {
     }
 
     deleteFR() {
+        console.log(this.props.userid)
         axios
         .post('/api/deleteFR',
         {
@@ -149,12 +150,14 @@ class FriendButton extends React.Component {
     }
 
     render () {
-        console.log("this.state", this.state)
+      console.log('status is ' + this.props.status)
+      console.log('sender_id is ' + this.props.sender_id)
+      console.log('other id is ' + this.props.otherUserId)
         return (
           <div>
-          {(!this.props.status || this.props.status === 3 || this.props.status === 4 || this.props.status === 5) && <button className="frbtn" onClick={this.sendFR}>Send Friend Request</button>
-          || ((this.props.status === 1 && this.state.sender_id === this.props.otherUserId) && <button className="frbtn" onClick={this.acceptFR}>Accept Friend Request</button>)
-          || ((this.props.status === 1 && this.state.sender_id !== this.props.otherUserId) && <div>Friend Request Sent</div>)
+          {(this.props.otherUserId === this.props.userid && <div>You found yourself!</div>) || (!this.props.status) && <button className="frbtn" onClick={this.sendFR}>Send Friend Request</button>
+          || ((this.props.status === 1 && this.props.sender_id === this.props.otherUserId) && <div> <button className="frbtn" onClick={this.acceptFR}>Accept Friend Request</button> <br></br> <button className="frbtn" onClick={this.rejectFR}>Reject Friend Request</button></div>)
+          || ((this.props.status === 1 && this.props.sender_id !== this.props.otherUserId) && <div>Friend Request Sent</div>)
           || (this.props.status === 2 && <button className="frbtn" onClick={this.deleteFR}>Unfriend</button>)
           }
           </div>
@@ -168,6 +171,8 @@ function mapStateToProps(state) {
     status:state.friendship.status,
     userid: state.authentication.id,
     token:state.authentication.token,
+    sender_id:state.friendship.sender_id,
+    receiver_id:state.friendship.receiver_id
   }
 }
 

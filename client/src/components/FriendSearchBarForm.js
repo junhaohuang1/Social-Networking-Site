@@ -30,7 +30,6 @@ const FriendSearchBarForm = (props) => (
 FriendSearchBarForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  searchedName: PropTypes.string.isRequired,
 };
 
 export default FriendSearchBarForm;

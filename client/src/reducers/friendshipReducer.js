@@ -4,6 +4,7 @@ export function friendship (
     receiver_id:"",
     searchedName:"",
     friendModalOpen: false,
+    status:"",
 
   },
 action) {
@@ -45,9 +46,11 @@ action) {
       searchingSuccess: action.payload.data.success,
       errors:{},
       searchedId:action.payload.data.userId,
-      searchedName:action.payload.data.username,
+      searchedName:"",
       searchedFirstName:action.payload.data.firstname,
       searchedLastName:action.payload.data.lastname,
+      sender_id:action.payload.data.sender_id,
+      receiver_id:action.payload.data.receiver_id,
       errorMessage:"",
       status:action.payload.data.status,
     };

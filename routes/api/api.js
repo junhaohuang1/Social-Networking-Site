@@ -147,14 +147,32 @@ router.post("/sendFR", (req, res) => {
 })
 
 
-router.post("/acceptFR", (req, res) => {
-    console.log("req.body.otherUserId", req.body.otherUserId);
+router.post("/acceptFR", (req, res, next) => {
+    // console.log("req.body.otherUserId", req.body.otherUserId);
+    // console.log("req.body.userid", req.body.userid);
+    //   db.friendships.update(
+    //     {
+    //       status:2
+    //     },
+    //     {
+    //       where:{
+    //         status:1,
+    //         [op.or]: [{receiver_id: req.body.otherUserId, sender_id:req.body.userid}, {receiver_id:req.body.userid, sender_id: req.body.otherUserId}]
+    //       },
+    //       returning: true
+    //     }
+    //   ).then(function([ rowsUpdate, [updatedFriendShip] ]){
+    //     res.status(200).json({
+    //       updatedFriendShip
+    //     });
+    //   }).catch(next)
+
     acceptFR(req.body.userid, req.body.otherUserId).then(result => {
-        console.log("acceptFR results.rows", result.rows);
+        console.log("acceptFR results.rows", results);
         res.json({
             success: true,
-            sender_id: result.rows[0] && result.rows[0].sender_id,
-            receiver_id: result.rows[0] && result.rows[0].receiver_id,
+            sender_id: results[0] && results[0].sender_id,
+            receiver_id: results[0] && results[0].receiver_id,
             status: 2
         })
     }).catch(e => {
@@ -177,19 +195,25 @@ router.post("/rejectFR", (req, res) => {
     })
 })
 
-router.post("/deleteFR", (req, res) => {
+router.post("/deleteFR", (req, res, next) => {
+  console.log("req.body.userid", req.body.userid);
     console.log("req.body.otherUserId", req.body.otherUserId);
-    deleteFR(req.body.userid, req.body.otherUserId).then(result => {
-        console.log("deleteFR results.rows", result.rows);
-        res.json({
-            success: true,
-            sender_id: result.rows[0] && result.rows[0].sender_id,
-            receiver_id: result.rows[0] && result.rows[0].receiver_id,
-            status: 4
-        })
-    }).catch(e => {
-        console.log(e);
-    })
+    db.friendships.update(
+      {
+        status:4
+      },
+      {
+        where:{
+          status:2,
+          [op.or]: [{receiver_id: req.body.otherUserId, sender_id:req.body.userid}, {receiver_id:req.body.userid, sender_id: req.body.otherUserId}]
+        },
+        returning: true
+      }
+    ).then(function(rowsUpdated){
+      res.status(200).json({
+        rowsUpdated
+      });
+    }).catch(next)
 })
 
 
@@ -249,7 +273,9 @@ router.get('/findfriend', (req, res, next) => {
             name:dbUser.username,
             firstname:dbUser.firstname,
             lastname:dbUser.lastname,
-            status:friendship.status
+            status:friendship.status,
+            sender_id:friendship.sender_id,
+            receiver_id:friendship.receiver_id
           }
           res.status(200);
           res.send(result);

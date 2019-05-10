@@ -54,6 +54,11 @@ class EditProfilePage extends React.Component {
    *
    * @param {object} event - the JavaScript event object
    */
+
+  componentWillUnmount() {
+    this.props.getProfile(this.props.userid, this.props.token)
+  }
+
    changeUser(event) {
      const name = event.target.name;
      const value = event.target.value;
@@ -151,6 +156,9 @@ const mapDispatchToProps = dispatch => {
     },
     updateProfileForm:(key, value) =>{
       dispatch(userActions.updateProfileForm(key, value))
+    },
+    getProfile:(userid,token)=>{
+      dispatch(userActions.getProfile(userid,token))
     }
   }
 }

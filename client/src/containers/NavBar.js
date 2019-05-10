@@ -24,7 +24,7 @@ class NavBar extends React.Component{
 
   getProfile(event){
     event.preventDefault();
-    this.props.getProfile(this.props.userid, this.props.token)
+
     store.dispatch(push('/profile'))
 
   }
