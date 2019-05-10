@@ -17,23 +17,107 @@ export const receiveFRList = (token, userid) => (dispatch) => (
 );
 
 
-
-export async function acceptFR(userid, otherUserId, token) {
-    const { data } = await axios.post('/api/acceptFR',
+export const acceptFR = (userid, wannabeid, token) =>{
+  return (dispatch) =>{
+    return axios.post('/api/acceptFR/',
     {
-      otherUserId: this.otherUserId,
+      otherUserId: wannabeid,
       userid:userid,
     },
     {
       headers:{
-      authorization:this.props.token
+      authorization:token
       }
-    });
-    return {
-        type: 'ACCEPT_FRIEND_REQUEST',
-        users: data
-    };
+    }
+    )
+      .then(response =>{
+        dispatch(acceptFriendSuccess(response.data))
+        dispatch(receiveFRList(token, userid))
+      })
+      .catch(error =>{
+        throw(error);
+      })
+
+  }
 }
+
+export const acceptFriendSuccess =  (data) => {
+  return {
+    type: "ACCEPT_FRIEND",
+    payload: {
+      data:data
+    }
+  }
+};
+
+export const rejectFR = (userid, wannabeid, token) =>{
+  return (dispatch) =>{
+    return axios.post('/api/rejectFR/',
+    {
+      otherUserId: wannabeid,
+      userid:userid,
+    },
+    {
+      headers:{
+      authorization:token
+      }
+    }
+    )
+      .then(response =>{
+        dispatch(rejectFriendSuccess(response.data))
+        dispatch(receiveFRList(token, userid))
+      })
+      .catch(error =>{
+        throw(error);
+      })
+
+  }
+}
+
+export const rejectFriendSuccess =  (data) => {
+  return {
+    type: "REJECT_FRIEND",
+    payload: {
+      data:data
+    }
+  }
+};
+
+export const unfriend = (userid, wannabeid, token) =>{
+  return (dispatch) =>{
+    return axios.post('/api/deleteFR/',
+    {
+      otherUserId: wannabeid,
+      userid:userid,
+    },
+    {
+      headers:{
+      authorization:token
+      }
+    }
+    )
+      .then(response =>{
+        dispatch(deleteFriendSuccess(response.data))
+        dispatch(receiveFRList(token, userid))
+      })
+      .catch(error =>{
+        throw(error);
+      })
+
+  }
+}
+
+export const deleteFriendSuccess =  (data) => {
+  return {
+    type: "DELETE_FRIEND",
+    payload: {
+      data:data
+    }
+  }
+};
+
+
+
 
 
 const searchFriend = (userid, searchedName, token) => (dispatch) => (
@@ -49,23 +133,6 @@ const searchFriend = (userid, searchedName, token) => (dispatch) => (
   })
 );
 
-
-
-export async function unfriend(userid, otherUserId, token) {
-    const { data } = await axios.post('/api/deleteFR',
-    {
-      otherUserId: otherUserId,
-      userid:userid,
-    },
-    {
-      headers:{
-      authorization:this.props.token
-      }
-    });
-    return {
-        type: 'UNFRIEND'
-    };
-}
 
 
 
