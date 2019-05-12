@@ -49,8 +49,52 @@ router.get('/dashboard', (req, res) => {
   });
 });
 
+router.post('/comment', (req, res) =>{
 
-router.get('/getPostLikes', (req, res) =>{
+  db.Comment.create({
+    userID:req.body.userId,
+    postID:req.body.postID,
+    username:req.body.username,
+    comment:req.body.comment
+  }).then(function(newLike, created){
+    res.status(200).json({
+      success:true
+    });
+    res.end();
+  }).catch(e=>{
+    console.log(e)
+  })
+})
+
+router.get('/getpostcomments', (req, res) =>{
+  connection.query('SELECT * FROM COMMENTS WHERE COMMENTS.postID = ? order by createdAt DESC',[req.headers.postid], function(error, results, fields){
+    if (error) throw error;
+
+    res.status(200).json({
+
+      postComments:results
+    })
+  })
+})
+
+
+router.get('/searchpost', (req, res) =>{
+  console.log(req.headers.query)
+  console.log(req.headers.userid)
+  connection.query('CALL searchPost(?,?)',[req.headers.query,req.headers.userid], function(error, results, fields){
+    if (error) throw error;
+    console.log('find something')
+    console.log(results)
+    res.status(200).json({
+      posts:results[0]
+    })
+  })
+})
+
+
+
+
+router.get('/getpostlikes', (req, res) =>{
 
   connection.query('SELECT * FROM LIKES WHERE LIKES.postID = ?',[req.headers.postid], function(error, results, fields){
     if (error) throw error;
@@ -61,7 +105,7 @@ router.get('/getPostLikes', (req, res) =>{
       }
     }).then(function(like){
       if(like){
-        console.log(like.dataValues.status)
+        // console.log(like.dataValues.status)
         res.status(200).json({
           likes:results,
           status:like.dataValues.status
@@ -167,17 +211,6 @@ router.post('/dislikepost', (req, res) =>{
   })
 
 
-
-
-
-
-
-
-
-
-
-
-
   // connection.query('SELECT * FROM LIKES WHERE LIKES.postID = ?',[req.headers.postID], function(error, results, fields){
   //   if (error) throw error;
   //   console.log(results)
@@ -195,6 +228,7 @@ router.post('/createpost',upload.single('file'), (req, res) => {
   const point = {type:'Point', coordinates:[req.body.lat,req.body.long]}
   db.Post.create({
     username:req.body.username,
+    userid:req.body.userid,
     title:req.body.title,
     textbody:req.body.textbody,
     coordinates:point,
@@ -223,7 +257,6 @@ router.get("/friendsposts", (req, res) => {
     console.log(req.headers.userid)
     connection.query('CALL searchFriendPost(?);',[req.headers.userid], function(error, results, fields) {
     if (error) throw error;
-    console.log(results)
     res.status(200).json({
       posts:results[0]
     })
@@ -410,10 +443,10 @@ router.get("/listFR", (req, res) => {
     //     console.log(e);
     // })
 
-    console.log(req.headers.userid)
+    // console.log(req.headers.userid)
     connection.query('CALL listFR(?);',[req.headers.userid], function(error, results, fields) {
     if (error) throw error;
-    console.log(results)
+    // console.log(results)
     res.status(200).json({
       users:results[0]
     })

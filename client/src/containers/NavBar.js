@@ -6,6 +6,7 @@ import FriendSearchBar from './FriendSearchBar.js';
 import { connect } from 'react-redux';
 import configureStore from "../configureStore.js";
 import { push } from 'connected-react-router'
+import PostSearchBar from './postsearch.js'
 
 const store = configureStore()
 
@@ -40,6 +41,7 @@ class NavBar extends React.Component{
           modalButton = {this.props.loggedIn ? <NavBarModal/> : null}
           getProfile = {this.getProfile}
           friendSearchButton = {this.props.loggedIn ? <FriendSearchBar/> : null}
+          postSearchButton = {this.props.loggedIn ? <PostSearchBar/> : null}
           />
 
         </div>

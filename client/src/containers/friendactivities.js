@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
 import MapModal from './mapmodal.js'
 import Likes from './likes.js'
+import Comment from './commentmodal.js'
 
 
 const rootstyle= {
@@ -27,7 +28,38 @@ const imgstyle = {
 }
 
 
-class Activity extends React.Component{
+class FriendActivity extends React.Component{
+
+  constructor(props){
+    super(props)
+    this.state = {
+      playing: false
+    }
+
+    this.playVideo = this.playVideo.bind(this)
+    this.pauseVideo = this.pauseVideo.bind(this)
+  }
+
+  onPlay = () => {
+    console.log('onPlay')
+    this.setState({ playing: true })
+  }
+
+  onPause = () => {
+    console.log('onPause')
+    this.setState({ playing: false })
+  }
+
+  playVideo(event){
+    event.preventDefault()
+    this.setState({ playing: true })
+  }
+
+  pauseVideo(event){
+    event.preventDefault()
+    console.log('pausing')
+    this.setState({ playing: false })
+  }
 
 
   componentDidMount(){
@@ -41,7 +73,7 @@ class Activity extends React.Component{
     }
     return this.props.friendsPosts.map(friendPost => {
       return (
-      <div key = {friendPost.id} class ='col-lg-8'>
+      <div key = {friendPost.id} class ='col-lg-8' style={{height:'100%'}}>
         <div className ='top'>
           <List style = {rootstyle}>
             <ListItem alignItems="flex-start">
@@ -53,17 +85,29 @@ class Activity extends React.Component{
                       {friendPost.username}:
                     </Typography>
                      {friendPost.textbody}
-                     <Likes postID={friendPost.id}/>
+                     <div class='container'>
+                      <div class ='row'>
+                        <Likes postID={friendPost.id}/>
+                      </div>
+                     </div>
                   </React.Fragment>
                 }
             />
             {friendPost.mimetype.includes('image') ? <img height='300px' width='300px' src={friendPost.path}/> :
+            <div>
+            <button onClick={this.playVideo}>Play</button>
+            <button onClick={this.pauseVideo}>Pause</button>
             <ReactPlayer
               className='react-player'
               url={friendPost.path}
               width='300px'
               height='300px'
+              playing={this.state.playing}
+              onPlay={this.onPlay}
+              onPause={this.onPause}
             />
+
+              </div>
             }
             <MapModal
               lat={friendPost.coordinates.x}
@@ -91,4 +135,4 @@ function mapStateToProps(state) {
 
 
 
-export default connect(mapStateToProps)(Activity)
+export default connect(mapStateToProps)(FriendActivity)

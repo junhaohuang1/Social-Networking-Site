@@ -22,7 +22,7 @@ function mapStateToProps(state) {
 
 
 const rootstyle= {
-  width: '100%',
+  width: '100%'
 }
 
 
@@ -46,7 +46,7 @@ class Friends extends React.Component {
             return null;
         }
         return (
-            <div className="friends-list col-sm-4">
+            <div className="friends-list col-sm-4" style={{height:'10000px'}}>
                 <div className="wannabes">
                     <h3>Pending:</h3>
 

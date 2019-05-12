@@ -22,6 +22,9 @@ console.log("NavBarForm props", props)
           <li className="nav-item">
             {props.friendSearchButton}
           </li>
+          <li className="nav-item">
+            {props.postSearchButton}
+          </li>
         </ul>
       ) : (
         <ul className="nav navbar-nav">

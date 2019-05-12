@@ -57,7 +57,7 @@ const updateFriendQuery = (key, value) => (dispatch) => (
 
 
 
-export const createPost = (username, title, textbody, lat, long, locationLabel, file, token) =>{
+export const createPost = (userid,username, title, textbody, lat, long, locationLabel, file, token) =>{
   var bodyFormData = new FormData();
   bodyFormData.append('username',username)
   bodyFormData.append('title',title)
@@ -66,6 +66,7 @@ export const createPost = (username, title, textbody, lat, long, locationLabel, 
   bodyFormData.append('lat',lat)
   bodyFormData.append('long',long)
   bodyFormData.append('locationLabel',locationLabel)
+  bodyFormData.append('userid', userid)
   return (dispatch) =>{
     return axios.post('/api/createpost',
       bodyFormData,

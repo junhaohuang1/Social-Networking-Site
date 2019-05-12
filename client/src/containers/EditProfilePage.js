@@ -12,7 +12,9 @@ class EditProfilePage extends React.Component {
    */
   constructor(props, context) {
     super(props, context);
-
+    this.state={
+      errors:""
+    }
 
     this.processForm = this.processForm.bind(this);
     this.changeUser = this.changeUser.bind(this);
@@ -31,17 +33,20 @@ class EditProfilePage extends React.Component {
     const firstname = this.props.firstname;
     const lastname = this.props.lastname;
     const birthday = this.props.birthday;
-    // const birthday = this.props.birthday.getUTCFullYear() + '-' +
-    // ('00' + (this.props.birthday.getUTCMonth()+1)).slice(-2) + '-' +
-    // ('00' + this.props.birthday.getUTCDate()).slice(-2) + ' ' +
-    // ('00' + this.props.birthday.getUTCHours()).slice(-2) + ':' +
-    // ('00' + this.props.birthday.getUTCMinutes()).slice(-2) + ':' +
-    // ('00' + this.props.birthday.getUTCSeconds()).slice(-2);
     const privacy = this.props.privacy;
     const interest = this.props.interest
     const region = this.props.region;
     const country = this.props.country;
     const token = this.props.token
+
+    if( !firstname || !lastname || !birthday || !privacy || !region ||!country || !interest){
+      console.log('empty')
+      this.setState({
+        errors:"Please fill out all information"
+      })
+    }
+
+
     if (userid && firstname && lastname && birthday && privacy && country && region && interest && token) {
 
         this.props.editProfile(userid, firstname, lastname, country, region, birthday, interest, privacy, token);
@@ -113,6 +118,7 @@ class EditProfilePage extends React.Component {
       // }
       return (
         <EditProfileForm
+          formError={this.state.errors}
           countryOptions={this.countryOptions}
           onSubmit={this.processForm}
           onChange={this.changeUser}

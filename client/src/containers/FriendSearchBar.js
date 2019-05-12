@@ -44,7 +44,8 @@ class FriendSearchBar extends React.Component {
     this.state = {
         userSearchedId:"",
         currentUserID:"",
-        token:""
+        token:"",
+        error:""
     }
 
   }
@@ -74,6 +75,12 @@ class FriendSearchBar extends React.Component {
     // create a string for an HTTP body message
     const searchedName = this.props.searchedName;
     console.log(searchedName);
+    if(!searchedName){
+      this.setState({
+        error:"Please fill out the form"
+      })
+    }
+
     if (searchedName) {
       this.props.searchFriend(this.props.userid, searchedName, this.props.token);
       this.props.openModal();
@@ -105,6 +112,7 @@ class FriendSearchBar extends React.Component {
           // errors={this.props.errors}
           // successMessage={this.props.successMessage}
           searchedName={this.props.searchedName}
+          error={this.state.error}
           // password={this.props.password}
         />
         <Modal

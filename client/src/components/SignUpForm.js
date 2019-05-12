@@ -16,6 +16,7 @@ const SignUpForm = (props) => (
 
       {props.errors.message && <p className="error-message">{props.errors.message}</p>}
       {props.successMessage && <p className="success-message">{props.successMessage}</p>}
+      {props.formError && <p className="error-message">{props.formError }</p>}
 
       <div className="field-line">
         <TextField

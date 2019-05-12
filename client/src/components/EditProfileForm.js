@@ -12,7 +12,7 @@ const EditProfileForm = (props) => (
   <Card className="container">
     <form action="/" onSubmit={props.onSubmit}>
       <h2 className="card-heading">Profile Page</h2>
-
+      {props.formError && <p className="error-message">{props.formError }</p>}
 
       <div className="field-line">
         <TextField

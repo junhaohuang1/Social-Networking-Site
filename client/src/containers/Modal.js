@@ -26,7 +26,9 @@ const customStyles = {
 class NavBarModal extends React.Component {
   constructor(props, context) {
     super(props, context);
-
+    this.state={
+      errors:{}
+    }
 
     this.openModal = this.props.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
@@ -62,8 +64,16 @@ class NavBarModal extends React.Component {
     const locationLabel = this.props.locationLabel
     console.log(lat)
     console.log(long)
-    if(username && title && textbody && file && token){
-      this.props.createPost(username, title, textbody, lat, long, locationLabel, file, token)
+
+    if(!textbody || !title || !locationLabel || !file){
+      this.setState({
+        errors:{textbody:"Please Fill Out All Information"}
+      })
+    }
+
+
+    if(username && title && textbody && file && token && lat && long && locationLabel){
+      this.props.createPost(this.props.userid,username, title, textbody, lat, long, locationLabel, file, this.props.token)
     }
   }
 
@@ -89,8 +99,13 @@ class NavBarModal extends React.Component {
        if (e.target.file.files.length) {
            const upload_file = e.target.file.files[0];
            this.props.updateModalInput('file',upload_file);
+           this.setState({
+             errors:{file:true}
+           })
        } else {
-           console.log('You need to select a file');
+         this.setState({
+           errors:{file:false}
+         })
        }
    }
 
@@ -129,7 +144,8 @@ class NavBarModal extends React.Component {
           <h2 ref={subtitle => this.subtitle = subtitle}>Create Post</h2>
           <button onClick={this.props.closeModal}>close</button>
 
-
+          {this.state.errors.textbody ? <div>{this.state.errors.textbody}</div> :""}
+          {this.state.errors.file ? <div>File Uploaded</div> :""}
           <form onSubmit={this.handleFileChange}>
             <label>Upload Multimedia File:</label>
             <input
@@ -148,7 +164,7 @@ class NavBarModal extends React.Component {
               floatingLabelText="Title"
               name="title"
               onChange={this.onChange}
-              errorText={this.props.errors.title ?(this.props.errors.title) :("")}
+              errorText={this.state.errors.title ?(this.state.errors.title) :("")}
               value={this.props.title}
             />
           </div>
@@ -158,7 +174,6 @@ class NavBarModal extends React.Component {
               floatingLabelText="Body"
               name="textbody"
               onChange={this.onChange}
-              errorText={this.props.errors.textbody ?(this.props.errors.textbody) :("")}
               value={this.props.textbody}
               multiLine={true}
               rows={3}
@@ -199,7 +214,8 @@ function mapStateToProps(state) {
     long:state.postModal.long,
     locationLabel:state.postModal.locationLabel,
     errors:state.postModal.errors,
-    filetype:state.postModal.filetype
+    filetype:state.postModal.filetype,
+    userid: state.authentication.id
 
   }
 }
@@ -215,8 +231,8 @@ const mapDispatchToProps = dispatch => {
     updateModalInput:(key,value) =>{
       dispatch(modalActions.updateModalInput(key,value))
     },
-    createPost:(username, title, textbody, lat, long, locationLabel, file, token) => {
-        dispatch(modalActions.createPost(username, title, textbody, lat, long, locationLabel, file, token))
+    createPost:(userid,username, title, textbody, lat, long, locationLabel, file, token) => {
+        dispatch(modalActions.createPost(userid,username, title, textbody, lat, long, locationLabel, file, token))
     }
   }
 }

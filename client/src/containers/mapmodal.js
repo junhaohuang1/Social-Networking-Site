@@ -57,10 +57,12 @@ class MapModal extends React.Component {
           <h3>{this.props.label}</h3>
           <div style={{ height: '100vh', width: '100%' }}>
             <GoogleMapReact
-              bootstrapURLKeys={{key:'AIzaSyCOlZmqoHYdC2sElHeeDhT5np21Ogsh8W4'}}
+              bootstrapURLKeys={{key:''}}
               defaultCenter={{lat:this.props.lat, lng:this.props.lng}}
               defaultZoom={15}
             >
+            <i class ='fa fa-user' style={{fontSize:'20px'}} lat={this.props.lat} lng={this.props.lng}></i>
+
             </GoogleMapReact>
             <Marker
                 name={this.props.label}

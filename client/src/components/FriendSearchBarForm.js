@@ -10,12 +10,14 @@ const FriendSearchBarForm = (props) => (
   <Card className="container">
     <form action="#" onSubmit={props.onSubmit} style = {{display:'flex', height: 63, width:500}}>
       <div className="field-line" style = {{flex:1, height: 62}}>
+
         <TextField
           style={{height: 62}}
           floatingLabelText="Search Friend Here By Username"
           name="searchedName"
           onChange={props.onChange}
           value={props.searchedName}
+          errorText={props.error}
         />
       </div>
 

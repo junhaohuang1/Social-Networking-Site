@@ -11,7 +11,8 @@ const initialState = {
   errors:{},
   lat:"",
   long:"",
-  locationLabel:""
+  locationLabel:"",
+
 }
 
 export function postModal(state = initialState, action) {

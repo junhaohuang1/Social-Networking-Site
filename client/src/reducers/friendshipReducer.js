@@ -5,7 +5,8 @@ export function friendship (
     searchedName:"",
     friendModalOpen: false,
     status:"",
-    friendsPosts:""
+    friendsPosts:"",
+    postSearchQuery:""
 
   },
 action) {

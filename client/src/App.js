@@ -8,6 +8,7 @@ import LoginPage from './containers/LoginPage.js';
 import HomePage from './containers/HomePage.js';
 import SignUpPage from './containers/SignUpPage.js';
 import EditProfilePage from './containers/EditProfilePage.js'
+import PostSearchResults from './containers/postsearchresults.js'
 
 import NavBar from './containers/NavBar.js';
 
@@ -26,6 +27,7 @@ const App = (props) => {
             <Route path = '/profile' component = {EditProfilePage}/>
             <Route path = '/login' component = {LoginPage}/>
             <Route path="/logout"  render={() => (<Redirect to="/"/>)}/>
+            <Route path='/searchpost' component = {PostSearchResults}/>
           </Switch>
         </div>
       </MuiThemeProvider>
@@ -34,7 +36,8 @@ const App = (props) => {
 function mapStateToProps(state) {
   return {
     loggedIn: state.authentication.loggedIn,
-    location: state.router.location
+    location: state.router.location,
+    postSearchQuery:state.friendship.postSearchQuery
   }
 }
 

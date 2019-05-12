@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios'
-
+import Comment from './commentmodal.js'
 
 const style={
   position:'absolute',
@@ -25,7 +25,7 @@ class Likes extends React.Component{
   }
 
   getPostLikes(){
-    console.log('get likes user ' + this.props.userid)
+
       axios.get('/api/getPostLikes',
       {
         headers:{
@@ -35,16 +35,13 @@ class Likes extends React.Component{
         }
       }
     ).then(resp => {
-        console.log(resp.data.likes)
         const likesArray = resp.data.likes.filter(likes => likes.status ===2)
         const dislikesArray = resp.data.likes.filter(likes => likes.status ===3)
-        console.log(likesArray)
         this.setState({
           likes:likesArray.length,
           dislikes:dislikesArray.length,
           status:resp.data.status
         })
-        console.log('status ' +this.state.status)
       }).catch(error =>{
         console.log(error)
       })
@@ -52,31 +49,12 @@ class Likes extends React.Component{
 
   componentDidMount(){
     this.getPostLikes()
-  //   console.log('getting stuff')
-  //   axios.get('/api/getPostLikes',
-  //   {
-  //     headers:{
-  //       authorization:this.props.token,
-  //       postID:this.props.postID,
-  //       userId:this.props.userId
-  //     }
-  //   }
-  // ).then(resp => {
-  //     this.setState({
-  //       likes:resp.data.likes,
-  //       dislikes:resp.data.dislikes,
-  //       status:1
-  //     })
-  //   }).catch(error =>{
-  //     console.log(error)
-  //   })
+
   }
 
 
   likePost(){
-    console.log('liking stuff')
-    console.log(this.props.userid)
-    console.log('post' + this.props.postID)
+
     axios.post('/api/likePost',
         {
           postID:this.props.postID,
@@ -100,9 +78,6 @@ class Likes extends React.Component{
   }
 
   dislikePost(){
-    console.log('disliking stuff')
-    console.log(this.props.userid)
-    console.log('post' + this.props.postID)
     axios.post('/api/dislikepost',
         {
           postID:this.props.postID,
@@ -128,13 +103,15 @@ class Likes extends React.Component{
 
 
   render(){
-    console.log(this.state.status)
     return (
 
       <div className="addlikes-wrapper" style={style}>
-               <div className="addlikes-container">
+
+               <div className="container">
+                <div class='row'>
+                  <Comment postID={this.props.postID}class='col-log-4'/>
                    <div
-                       className="btn like"
+                       className="btn like col-log-4"
                        onClick={this.likePost}>
                        <div className="hits" style={{float:'left'}}>{this.state.likes}</div>
                        <div className="icon" style={{float:'right'}}>
@@ -144,7 +121,7 @@ class Likes extends React.Component{
                        </div>
                    </div>
                    <div
-                       className="btn dislike"
+                       className="btn dislike col-log-4"
                        onClick={this.dislikePost}>
                          <div className="hits" style={{float:'left'}}>{this.state.dislikes}</div>
                          <div className="icon" style={{float:'right'}}>
@@ -153,8 +130,9 @@ class Likes extends React.Component{
                          }
                          </div>
                    </div>
-                   <div></div>
-               </div>
+
+                   </div>
+              </div>
            </div>
     )
   }

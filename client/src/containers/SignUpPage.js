@@ -12,6 +12,9 @@ class SignUpPage extends React.Component {
   constructor(props, context) {
     super(props, context);
 
+    this.state={
+      errors:""
+    }
 
     this.processForm = this.processForm.bind(this);
     this.changeUser = this.changeUser.bind(this);
@@ -43,7 +46,15 @@ class SignUpPage extends React.Component {
     const region = this.props.region;
     const country = this.props.country;
     const interest = this.props.interest;
-    if (username && firstname && lastname && password && birthday && privacy && country && region && interest) {
+
+    if(!username || !firstname || !lastname || !password || !birthday || !region ||!country || !interest){
+      console.log('empty')
+      this.setState({
+        errors:"Please fill out all information"
+      })
+    }
+
+    if (username && firstname && lastname && password && birthday && country && region && interest) {
         this.props.signup(username, firstname, lastname, country, region, password, birthday, interest, privacy);
     }
   }
@@ -111,6 +122,7 @@ class SignUpPage extends React.Component {
       // }
       return (
         <SignUpForm
+          formError={this.state.errors}
           countryOptions={this.countryOptions}
           onSubmit={this.processForm}
           onChange={this.changeUser}
