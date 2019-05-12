@@ -7,6 +7,21 @@ const openModal = () => (dispatch) => (
 )
 
 
+const openMapModal = () => (dispatch) => (
+  dispatch({
+      type: 'MAP_MODAL_OPEN',
+  })
+)
+
+const closeMapModal = () => (dispatch) => (
+  dispatch({
+      type: 'MAP_MODAL_CLOSE',
+  })
+)
+
+
+
+
 const closeModal = () => (dispatch) => (
   dispatch({
       type: "MODAL_CLOSE",
@@ -42,16 +57,15 @@ const updateFriendQuery = (key, value) => (dispatch) => (
 
 
 
-export const createPost = (username, title, textbody, country, region, file, filetype, token) =>{
+export const createPost = (username, title, textbody, lat, long, locationLabel, file, token) =>{
   var bodyFormData = new FormData();
   bodyFormData.append('username',username)
   bodyFormData.append('title',title)
   bodyFormData.append('textbody',textbody)
   bodyFormData.append('file',file)
-  bodyFormData.append('filetype',filetype)
-  bodyFormData.append('country',country)
-  bodyFormData.append('region',region)
-
+  bodyFormData.append('lat',lat)
+  bodyFormData.append('long',long)
+  bodyFormData.append('locationLabel',locationLabel)
   return (dispatch) =>{
     return axios.post('/api/createpost',
       bodyFormData,
@@ -92,5 +106,7 @@ export const modalActions = {
   createPost,
   openFriendSearchResultModal,
   closeFriendSearchResultModal,
-  updateFriendQuery
+  updateFriendQuery,
+  openMapModal,
+  closeMapModal
 };

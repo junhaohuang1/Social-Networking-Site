@@ -9,7 +9,9 @@ const initialState = {
   region:"",
   country:"",
   errors:{},
-  filetype:""
+  lat:"",
+  long:"",
+  locationLabel:""
 }
 
 export function postModal(state = initialState, action) {
@@ -37,7 +39,6 @@ export function postModal(state = initialState, action) {
       region:"",
       country:"",
       errors:{},
-      filetype:"",
       title:"",
       textbody:"",
       file:"",

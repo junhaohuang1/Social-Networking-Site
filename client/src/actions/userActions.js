@@ -17,6 +17,22 @@ export const receiveFRList = (token, userid) => (dispatch) => (
 );
 
 
+
+export const receiveFRPostList = (token, userid) => (dispatch) => (
+  dispatch({
+    type: "RECEIVE_FRIENDS_POSTS",
+    payload: axios.get('/api/friendsposts',{
+      headers:{
+        authorization:token,
+        userid:userid,
+      }
+    })
+  })
+);
+
+
+
+
 export const acceptFR = (userid, wannabeid, token) =>{
   return (dispatch) =>{
     return axios.post('/api/acceptFR/',
@@ -33,6 +49,7 @@ export const acceptFR = (userid, wannabeid, token) =>{
       .then(response =>{
         dispatch(acceptFriendSuccess(response.data))
         dispatch(receiveFRList(token, userid))
+        dispatch(receiveFRPostList(token, userid))
       })
       .catch(error =>{
         throw(error);
@@ -99,6 +116,7 @@ export const unfriend = (userid, wannabeid, token) =>{
       .then(response =>{
         dispatch(deleteFriendSuccess(response.data))
         dispatch(receiveFRList(token, userid))
+        dispatch(receiveFRPostList(token, userid))
       })
       .catch(error =>{
         throw(error);

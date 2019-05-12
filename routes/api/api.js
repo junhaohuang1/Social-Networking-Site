@@ -5,7 +5,7 @@ var multer  = require('multer')
 const path = require('path');
 const Sequelize = require('sequelize');
 const op = Sequelize.Op;
-
+const storagePath = require('../../path.js')
 
 const {acceptFR, sendFR, rejectFR, deleteFR, listFR} = require('./db')
 
@@ -31,13 +31,15 @@ connection.connect(function(err) {
 
 const router = new express.Router();
 
+console.log(storagePath.storagePath)
+
 const storage = multer.diskStorage({
-  destination: __dirname + '/uploads'
+  destination: storagePath.storagePath
 })
 
 const upload = multer({ storage: storage })
 
-router.use('/files/',express.static('uploads'));
+
 
 
 router.get('/dashboard', (req, res) => {
@@ -48,19 +50,183 @@ router.get('/dashboard', (req, res) => {
 });
 
 
+router.get('/getPostLikes', (req, res) =>{
+
+  connection.query('SELECT * FROM LIKES WHERE LIKES.postID = ?',[req.headers.postid], function(error, results, fields){
+    if (error) throw error;
+    db.Like.findOne({
+      where:{
+        postID:req.headers.postid,
+        userID:req.headers.userid
+      }
+    }).then(function(like){
+      if(like){
+        console.log(like.dataValues.status)
+        res.status(200).json({
+          likes:results,
+          status:like.dataValues.status
+        })
+      } else {
+        res.status(200).json({
+          likes:results,
+          status:0
+        })
+      }
+    })
+  })
+})
+
+
+
+router.post('/likepost', (req, res) =>{
+  db.Like.findOne({
+    where:{
+      postID:req.body.postID,
+      userID:req.body.userId
+    }
+  }).then(function(like){
+    if(!like){
+      db.Like.create({
+        userID:req.body.userId,
+        postID:req.body.postID,
+        status:2
+      }).then(function(newLike, created){
+        res.status(200).json({
+          status:2
+        });
+        res.end();
+      }).catch(e=>{
+        console.log(e)
+      })
+    } else {
+      db.Like.update(
+        {
+          status:2
+        },
+        {
+          where:{
+            userID:req.body.userId,
+            postID:req.body.postID
+          }
+        }
+      ).then(function(rowsUpdated){
+        res.status(200).json({
+          status:2
+        });
+        res.end()
+      }).catch(e=>{
+        console.log(e)
+      })
+    }
+  })
+})
+
+router.post('/dislikepost', (req, res) =>{
+  console.log('disliking stuff')
+  db.Like.findOne({
+    where:{
+      postID:req.body.postID,
+      userID:req.body.userId
+    }
+  }).then(function(like){
+    if(!like){
+      console.log('nothing yet')
+      db.Like.create({
+        userID:req.body.userId,
+        postID:req.body.postID,
+        status:3
+      }).then(function(newLike, created){
+        res.status(200).json({
+          status:3
+        });
+        res.end();
+      }).catch(e=>{
+        console.log(e)
+      })
+    } else {
+      console.log('liked already')
+      db.Like.update(
+        {
+          status:3
+        },
+        {
+          where:{
+            userID:req.body.userId,
+            postID:req.body.postID
+          }
+        }
+      ).then(function(rowsUpdated){
+        res.status(200).json({
+          status:3
+        });
+        res.end()
+      }).catch(e=>{
+        console.log(e)
+      })
+    }
+  })
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // connection.query('SELECT * FROM LIKES WHERE LIKES.postID = ?',[req.headers.postID], function(error, results, fields){
+  //   if (error) throw error;
+  //   console.log(results)
+  //   res.status(200).json({
+  //     likes:results[0]
+  //   })
+  // })
+})
+
+
+
+
 router.post('/createpost',upload.single('file'), (req, res) => {
   console.log(req.file)
+  const point = {type:'Point', coordinates:[req.body.lat,req.body.long]}
   db.Post.create({
     username:req.body.username,
     title:req.body.title,
     textbody:req.body.textbody,
-    region: req.body.region,
-    country:req.body.country,
+    coordinates:point,
+    locationLabel: req.body.locationLabel,
     path:req.file.filename,
-    mimetype:req.file.mime
+    mimetype:req.file.mimetype
   }).then(function(newPost, created){
     res.status(200);
     res.end();
+  })
+})
+
+
+router.get("/friendsposts", (req, res) => {
+    // listFR(req.session.user.id).then(result => {
+    //     console.log("listFR results.rows", result.rows);
+    //     res.json({
+    //         success: true,
+    //         users: result.rows,
+    //         loggedUser: req.session.user.id
+    //     })
+    // }).catch(e => {
+    //     console.log(e);
+    // })
+
+    console.log(req.headers.userid)
+    connection.query('CALL searchFriendPost(?);',[req.headers.userid], function(error, results, fields) {
+    if (error) throw error;
+    console.log(results)
+    res.status(200).json({
+      posts:results[0]
+    })
   })
 })
 

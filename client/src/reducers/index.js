@@ -6,6 +6,7 @@ import { friendship } from './friendshipReducer.js';
 import { note } from './noteReducer.js'
 import { alert } from './alertReducer.js';
 import {postModal} from './postModalReducer.js';
+import {map} from './mapReducer.js'
 import { connectRouter } from 'connected-react-router'
 
 
@@ -17,6 +18,7 @@ export default (history)=> combineReducers({
   alert,
   postModal,
   note,
+  map,
 
   router:connectRouter(history)
 });

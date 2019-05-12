@@ -7,6 +7,17 @@ var basename  = path.basename(__filename);
 var env       = process.env.NODE_ENV || 'development';
 var config    = require(__dirname + '/../config/config.json')[env];
 var db        = {};
+
+const Wkt = require('terraformer-wkt-parser')
+Sequelize.GEOMETRY.prototype._stringify = function _stringify(value, options) {
+  return 'ST_GeomFromText(' + options.escape(Wkt.convert(value)) + ')'
+}
+Sequelize.GEOGRAPHY.prototype._stringify = function _stringify(value, options) {
+  return 'ST_GeomFromText(' + options.escape(Wkt.convert(value)) + ')'
+}
+
+
+
 const operatorsAliases = {
   "$and": "Op.and",
   "$or": "Op.or",

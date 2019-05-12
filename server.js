@@ -12,6 +12,9 @@ const jwtSecret = "a secret phrase!!";
 var db = require("./models");
 var cors = require('cors')
 var multer = require('multer');
+var path = require('path')
+var fs = require('fs')
+
 
 
 // Configure body parser for AJAX requests
@@ -23,6 +26,8 @@ app.use(cors())
 // Serve up static assets
 app.use(express.static("client/build"));
 app.use(express.static("client/public"));
+app.use('/files',express.static(path.join(__dirname, "routes/uploads/api/uploads")));
+
 
 
 

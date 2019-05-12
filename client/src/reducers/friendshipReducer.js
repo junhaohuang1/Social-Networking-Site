@@ -5,6 +5,7 @@ export function friendship (
     searchedName:"",
     friendModalOpen: false,
     status:"",
+    friendsPosts:""
 
   },
 action) {
@@ -98,5 +99,15 @@ action) {
             })
         }
     }
+
+    if(action.type==='RECEIVE_FRIENDS_POSTS_FULFILLED'){
+      return{
+          ...state,
+          friendsPosts: action.payload.data.posts
+        };
+    }
+
+
+
     return state;
 }

@@ -17,11 +17,11 @@ module.exports = function(sequelize, DataTypes){
       type: DataTypes.STRING,
       allowNull: false
     },
-    country:{
-      type: DataTypes.STRING,
+    coordinates:{
+      type: DataTypes.GEOMETRY('POINT'),
       allowNull: false
     },
-    region:{
+    locationLabel:{
       type: DataTypes.STRING,
       allowNull: false
     },

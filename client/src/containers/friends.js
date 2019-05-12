@@ -1,8 +1,12 @@
 import React from 'react';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import { receiveFRList, unfriend, acceptFR, rejectFR } from '../actions/userActions';
 import {Link} from 'react-router-dom'
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 
 function mapStateToProps(state) {
@@ -15,6 +19,19 @@ function mapStateToProps(state) {
     }
 }
 
+
+
+const rootstyle= {
+  width: '100%',
+}
+
+
+
+const inline=  {
+    display: 'inline'
+}
+
+
 class Friends extends React.Component {
 
     componentDidMount() {
@@ -25,47 +42,71 @@ class Friends extends React.Component {
 
 
     render () {
-        if (this.props.friends.length ===0 && this.props.wannabes.length === 0) {
+        if (!this.props.friends) {
             return null;
         }
         return (
-            <div className="friends-list">
+            <div className="friends-list col-sm-4">
                 <div className="wannabes">
                     <h3>Pending:</h3>
 
-                    {this.props.wannabes.length === 0 && <p>You have no pending friend requests :(</p>}
+                    {this.props.wannabes === 0 && <p>You have no pending friend requests :(</p>}
                     {this.props.wannabes.map(wannabe => {
                         return (
                             <div key={wannabe.id} className="wannabe">
                                 <div className="friends-right">
-                                    <div className="friends-name">
-                                        Name: {wannabe.firstname} {wannabe.lastname} Username :{wannabe.username}
-                                    </div>
+                                <List style = {rootstyle}>
+                                  <ListItem alignItems="flex-start">
+                                  <ListItemText
+                                    primary= {"Name: " + wannabe.firstname + " " + wannabe.lastname}
+                                    secondary={
+                                      <React.Fragment>
+                                        <Typography component="h2" style={inline} color="textPrimary">
+                                          Username: {wannabe.username}
+                                        </Typography>
+                                      </React.Fragment>
+                                    }
+                                  />
+                                  <ListItemSecondaryAction>
+
+                                  </ListItemSecondaryAction>
                                     <button className="frbtn" onClick={ () =>
                                         this.props.dispatch(acceptFR(this.props.userid, wannabe.id, this.props.token))}>Accept</button>
                                     <button className="frbtn" onClick={ () =>
                                         this.props.dispatch(unfriend(this.props.userid, wannabe.id, this.props.token))}>Reject</button>
+                                  </ListItem>
+                                </List>
                                 </div>
                             </div>
                         )
                     })}
                 </div>
                 <div className="friends">
-                    <h3>Friends:</h3>
-                    {this.props.friends.length === 0 && <p>You have no friends yet :(</p>}
+                    <h3 >Friends:</h3>
+                    {this.props.friends === 0 && <p>You have no friends yet :(</p>}
                     {this.props.friends.map(friend => {
                         return (
                             <div key={friend.id} className="friend">
-                                <div className="friends-right">
-                                    <div className="friends-name">
-                                        Name: {friend.firstname} {friend.lastname} Username: {friend.username}
-                                    </div>
-                                    <div className="friends-name">
-
-                                    </div>
-                                    <button className="frbtn" onClick={ () =>
-                                        this.props.dispatch(unfriend(this.props.userid, friend.id, this.props.token))}>Unfriend</button>
-                                </div>
+                            <div className="friends-right">
+                            <List style = {rootstyle}>
+                              <ListItem alignItems="flex-start">
+                              <ListItemText
+                                primary= {"Name: " + friend.firstname + " " + friend.lastname}
+                                secondary={
+                                  <React.Fragment>
+                                    <Typography component="h2" style={inline} color="textPrimary">
+                                      Username: {friend.username}
+                                    </Typography>
+                                  </React.Fragment>
+                                }
+                              />
+                              <ListItemSecondaryAction>
+                              <button className="frbtn" onClick={ () =>
+                                  this.props.dispatch(unfriend(this.props.userid, friend.id, this.props.token))}>Unfriend</button>
+                              </ListItemSecondaryAction>
+                              </ListItem>
+                            </List>
+                            </div>
                             </div>
                         )
                     })}

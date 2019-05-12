@@ -10,6 +10,7 @@ import Select from 'react-select';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Geosuggest from 'react-geosuggest';
 
 const customStyles = {
   content : {
@@ -55,12 +56,14 @@ class NavBarModal extends React.Component {
     const title = this.props.title
     const textbody = this.props.textbody
     const file = this.props.file
-    const filetype = this.props.filetype
     const token = this.props.token
-    const country = this.props.country.label
-    const region = this.props.region.label
-    if(username && title && textbody && file && filetype && token){
-      this.props.createPost(username, title, textbody, country, region, file, filetype, token)
+    const lat = this.props.lat
+    const long = this.props.long
+    const locationLabel = this.props.locationLabel
+    console.log(lat)
+    console.log(long)
+    if(username && title && textbody && file && token){
+      this.props.createPost(username, title, textbody, lat, long, locationLabel, file, token)
     }
   }
 
@@ -89,6 +92,16 @@ class NavBarModal extends React.Component {
        } else {
            console.log('You need to select a file');
        }
+   }
+
+   onSuggestSelect = (suggest) =>{
+
+     if (suggest) {
+       console.log(suggest)
+       this.props.updateModalInput('lat', suggest.location.lat)
+       this.props.updateModalInput('long', suggest.location.lng)
+       this.props.updateModalInput('locationLabel', suggest.label)
+     }
    }
 
 
@@ -152,26 +165,12 @@ class NavBarModal extends React.Component {
             />
           </div>
 
+          <Geosuggest
+            placehold ='Start typing!'
+            onSuggestSelect={this.onSuggestSelect}
 
-          <div className="field-line">
-          Country
-          <Select
-              value={this.props.country}
-              onChange={this.selectCountry}
-              options={this.countryOptions}
           />
-          </div>
 
-          <div className="field-line">
-          Region
-          <Select
-              value={this.props.region}
-              onChange={this.selectRegion}
-              options={this.getRegions(this.props.country.value).map((option) =>(
-                {value:option, label: option}
-              ))}
-          />
-          </div>
 
 
           <br></br>
@@ -196,8 +195,9 @@ function mapStateToProps(state) {
     textbody:state.postModal.textbody,
     username: state.authentication.username,
     token: state.authentication.token,
-    country:state.postModal.country,
-    region:state.postModal.region,
+    lat:state.postModal.lat,
+    long:state.postModal.long,
+    locationLabel:state.postModal.locationLabel,
     errors:state.postModal.errors,
     filetype:state.postModal.filetype
 
@@ -215,8 +215,8 @@ const mapDispatchToProps = dispatch => {
     updateModalInput:(key,value) =>{
       dispatch(modalActions.updateModalInput(key,value))
     },
-    createPost:(username, title, textbody, country, region, file, filetype, token) => {
-        dispatch(modalActions.createPost(username, title, textbody, country, region, file, filetype, token))
+    createPost:(username, title, textbody, lat, long, locationLabel, file, token) => {
+        dispatch(modalActions.createPost(username, title, textbody, lat, long, locationLabel, file, token))
     }
   }
 }
