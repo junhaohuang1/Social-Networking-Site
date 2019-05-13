@@ -1,13 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { receiveFRList, unfriend, acceptFR, rejectFR } from '../actions/userActions';
+import { updateFriendQuery2 } from '../actions/modalActions';
 import {Link} from 'react-router-dom'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-
+import configureStore from "../configureStore.js";
+import { push } from 'connected-react-router'
+import { modalActions } from '../actions';
+const store = configureStore()
 
 function mapStateToProps(state) {
     return {
@@ -16,8 +20,11 @@ function mapStateToProps(state) {
         friends: state.friendship.friendsAndWannabes && state.friendship.friendsAndWannabes.filter(user => user.status === 2),
         wannabes: state.friendship.friendsAndWannabes && state.friendship.friendsAndWannabes.filter(user => (user.status === 1 && user.sender_id !== state.authentication.id)),
         token:state.authentication.token,
+        usernameQuery:state.friendship.usernameQuery
     }
 }
+
+
 
 
 
@@ -33,6 +40,18 @@ const inline=  {
 
 
 class Friends extends React.Component {
+
+    constructor(props){
+      super(props)
+      this.onClick = this.onClick.bind(this);
+    }
+
+
+    onClick(event){
+      event.preventDefault();
+      this.props.dispatch(updateFriendQuery2('usernameQuery', event.target.name));
+      store.dispatch(push('/friendpost'))
+    }
 
     componentDidMount() {
         this.props.dispatch(receiveFRList(this.props.token, this.props.userid));
@@ -101,6 +120,7 @@ class Friends extends React.Component {
                                 }
                               />
                               <ListItemSecondaryAction>
+                              <button className="frbtn" name ={friend.username} onClick={this.onClick}>Activities</button>
                               <button className="frbtn" onClick={ () =>
                                   this.props.dispatch(unfriend(this.props.userid, friend.id, this.props.token))}>Unfriend</button>
                               </ListItemSecondaryAction>

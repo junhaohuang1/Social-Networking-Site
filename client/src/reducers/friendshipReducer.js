@@ -6,7 +6,9 @@ export function friendship (
     friendModalOpen: false,
     status:"",
     friendsPosts:"",
-    postSearchQuery:""
+    postSearchQuery:"",
+    usernameQuery:"",
+    queryType:''
 
   },
 action) {

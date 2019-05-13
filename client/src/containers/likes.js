@@ -25,7 +25,7 @@ class Likes extends React.Component{
   }
 
   getPostLikes(){
-
+      console.log('get post likes')
       axios.get('/api/getPostLikes',
       {
         headers:{

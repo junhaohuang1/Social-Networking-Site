@@ -29,7 +29,7 @@ const imgstyle = {
 }
 
 
-class PostSearchResults extends React.Component{
+class FriendPostSearchResults extends React.Component{
 
   constructor(props){
     super(props);
@@ -63,14 +63,12 @@ class PostSearchResults extends React.Component{
   }
 
   componentDidMount(){
-    console.log('i am user ' + this.props.userid)
-      axios.get('/api/searchpost',
+    console.log('get likes user ' + this.props.userid)
+      axios.get('/api/friendposts',
       {
         headers:{
           authorization:this.props.token,
-          query:this.props.postSearchQuery,
-          querytype:this.props.queryType,
-          userid:this.props.userid
+          query:this.props.usernameQuery,
         }
       }
     ).then(resp => {
@@ -144,8 +142,7 @@ function mapStateToProps(state) {
     userid: state.authentication.id,
     token: state.authentication.token,
     errors:state.postModal.errors,
-    postSearchQuery:state.friendship.postSearchQuery,
-    queryType:state.friendship.queryType,
+    usernameQuery:state.friendship.usernameQuery
   }
 }
 
@@ -160,4 +157,4 @@ const mapDispatchToProps = dispatch =>{
 
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(PostSearchResults)
+export default connect(mapStateToProps,mapDispatchToProps)(FriendPostSearchResults)

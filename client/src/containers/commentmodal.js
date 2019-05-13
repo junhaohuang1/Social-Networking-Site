@@ -77,7 +77,7 @@ class Comment extends React.Component{
   }
 
   getPostComments(){
-    console.log('get likes user ' + this.props.userid)
+    console.log('get user comments')
       axios.get('/api/getpostcomments',
       {
         headers:{
@@ -144,7 +144,7 @@ class Comment extends React.Component{
 
   render(){
     return(
-      <div style={style}>
+      <div>
         <button onClick={this.openModal}>
           <i class='fa fa-comments-o' style={{fontSize:'20px'}}>
           <div className="hits" style={{float:'left'}}>{this.state.postCommentsCount}</div>

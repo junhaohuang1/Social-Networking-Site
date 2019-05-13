@@ -67,6 +67,7 @@ router.post('/comment', (req, res) =>{
 })
 
 router.get('/getpostcomments', (req, res) =>{
+  console.log('looking for comments for post id :' + req.headers.postid)
   connection.query('SELECT * FROM COMMENTS WHERE COMMENTS.postID = ? order by createdAt DESC',[req.headers.postid], function(error, results, fields){
     if (error) throw error;
 
@@ -79,9 +80,56 @@ router.get('/getpostcomments', (req, res) =>{
 
 
 router.get('/searchpost', (req, res) =>{
-  console.log(req.headers.query)
-  console.log(req.headers.userid)
-  connection.query('CALL searchPost(?,?)',[req.headers.query,req.headers.userid], function(error, results, fields){
+  console.log('query is ' +req.headers.query)
+  console.log('userid is' +req.headers.userid)
+
+  if(req.headers.querytype === 'location'){
+    connection.query('CALL searchPostByLocation(?,?)',[req.headers.query,req.headers.userid], function(error, results, fields){
+      if (error) throw error;
+      console.log('find location')
+      console.log(results)
+      res.status(200).json({
+        posts:results[0]
+      })
+    })
+
+  } else if (req.headers.querytype === 'interest'){
+    connection.query('CALL searchPostByInterest(?,?)',[req.headers.query,req.headers.userid], function(error, results, fields){
+      if (error) throw error;
+      console.log('find interest')
+      console.log(results)
+      res.status(200).json({
+        posts:results[0]
+      })
+    })
+
+  } else if (req.headers.querytype === 'username'){
+    connection.query('CALL searchPostByUsername(?,?)',[req.headers.query,req.headers.userid], function(error, results, fields){
+      if (error) throw error;
+      console.log('find username')
+      console.log(results)
+      res.status(200).json({
+        posts:results[0]
+      })
+    })
+
+  }else if (req.headers.querytype === 'title'){
+    connection.query('CALL searchPostByTitle(?,?)',[req.headers.query,req.headers.userid], function(error, results, fields){
+      if (error) throw error;
+      console.log('find username')
+      console.log(results)
+      res.status(200).json({
+        posts:results[0]
+      })
+    })
+
+  }
+})
+
+
+router.get('/friendposts', (req, res) =>{
+  console.log('quering for '+req.headers.query)
+  connection.query('CALL searchFriendPost(?)',[req.headers.query], function(error, results, fields){
     if (error) throw error;
     console.log('find something')
     console.log(results)
@@ -143,24 +191,43 @@ router.post('/likepost', (req, res) =>{
         console.log(e)
       })
     } else {
-      db.Like.update(
-        {
-          status:2
-        },
-        {
-          where:{
-            userID:req.body.userId,
-            postID:req.body.postID
+      if(like.dataValues.status !==2){
+        db.Like.update(
+          {
+            status:2
+          },
+          {
+            where:{
+              userID:req.body.userId,
+              postID:req.body.postID
+            }
           }
-        }
-      ).then(function(rowsUpdated){
-        res.status(200).json({
-          status:2
-        });
-        res.end()
-      }).catch(e=>{
-        console.log(e)
-      })
+        ).then(function(rowsUpdated){
+          res.status(200).json({
+            status:2
+          });
+          res.end()
+        }).catch(e=>{
+          console.log(e)
+        })
+      } else {
+        db.Like.destroy(
+          {
+            where:{
+              userID:req.body.userId,
+              postID:req.body.postID
+            }
+          }
+        ).then(function(rowsUpdated){
+          res.status(200).json({
+            status:2
+          });
+          res.end()
+        }).catch(e=>{
+          console.log(e)
+        })
+      }
+
     }
   })
 })
@@ -189,24 +256,42 @@ router.post('/dislikepost', (req, res) =>{
       })
     } else {
       console.log('liked already')
-      db.Like.update(
-        {
-          status:3
-        },
-        {
-          where:{
-            userID:req.body.userId,
-            postID:req.body.postID
+      if(like.dataValues.status !==3){
+        db.Like.update(
+          {
+            status:3
+          },
+          {
+            where:{
+              userID:req.body.userId,
+              postID:req.body.postID
+            }
           }
-        }
-      ).then(function(rowsUpdated){
-        res.status(200).json({
-          status:3
-        });
-        res.end()
-      }).catch(e=>{
-        console.log(e)
-      })
+        ).then(function(rowsUpdated){
+          res.status(200).json({
+            status:3
+          });
+          res.end()
+        }).catch(e=>{
+          console.log(e)
+        })
+      } else {
+        db.Like.destroy(
+          {
+            where:{
+              userID:req.body.userId,
+              postID:req.body.postID
+            }
+          }
+        ).then(function(rowsUpdated){
+          res.status(200).json({
+            status:3
+          });
+          res.end()
+        }).catch(e=>{
+          console.log(e)
+        })
+      }
     }
   })
 
@@ -255,7 +340,7 @@ router.get("/friendsposts", (req, res) => {
     // })
 
     console.log(req.headers.userid)
-    connection.query('CALL searchFriendPost(?);',[req.headers.userid], function(error, results, fields) {
+    connection.query('CALL searchFriendsPost(?);',[req.headers.userid], function(error, results, fields) {
     if (error) throw error;
     res.status(200).json({
       posts:results[0]

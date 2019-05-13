@@ -10,6 +10,9 @@ console.log("NavBarForm props", props)
         <Link className="navbar-brand" to="/">Research Network</Link>
       {props.loggedIn ? (
         <ul className="nav navbar-nav">
+        <li className="nav-item">
+          {props.postSearchButton}
+        </li>
           <li className="nav-item">
             <Link to="/profile" onClick={props.getProfile}>Edit Profile</Link>
           </li>
@@ -22,9 +25,7 @@ console.log("NavBarForm props", props)
           <li className="nav-item">
             {props.friendSearchButton}
           </li>
-          <li className="nav-item">
-            {props.postSearchButton}
-          </li>
+
         </ul>
       ) : (
         <ul className="nav navbar-nav">

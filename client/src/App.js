@@ -9,6 +9,7 @@ import HomePage from './containers/HomePage.js';
 import SignUpPage from './containers/SignUpPage.js';
 import EditProfilePage from './containers/EditProfilePage.js'
 import PostSearchResults from './containers/postsearchresults.js'
+import FriendPostSearchResults from './containers/friendposts.js'
 
 import NavBar from './containers/NavBar.js';
 
@@ -28,6 +29,7 @@ const App = (props) => {
             <Route path = '/login' component = {LoginPage}/>
             <Route path="/logout"  render={() => (<Redirect to="/"/>)}/>
             <Route path='/searchpost' component = {PostSearchResults}/>
+            <Route path='/friendpost' component = {FriendPostSearchResults}/>
           </Switch>
         </div>
       </MuiThemeProvider>

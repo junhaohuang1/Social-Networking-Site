@@ -56,6 +56,15 @@ const updateFriendQuery = (key, value) => (dispatch) => (
 )
 
 
+export const updateFriendQuery2 = (key, value) => (dispatch) => (
+  dispatch({
+      type: "FRIEND_QUERY_UPDATE_VALUE_FULFILLED",
+      key, value
+  })
+)
+
+
+
 
 export const createPost = (userid,username, title, textbody, lat, long, locationLabel, file, token) =>{
   var bodyFormData = new FormData();

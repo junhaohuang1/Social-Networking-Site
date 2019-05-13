@@ -37,11 +37,13 @@ class NavBar extends React.Component{
           logout={this.logout}
           loggedIn={this.props.loggedIn}
           openModal={this.openModal}
+          postSearchButton = {this.props.loggedIn ? <PostSearchBar/> : null}
           openFriendModal={this.openFriendModal}
           modalButton = {this.props.loggedIn ? <NavBarModal/> : null}
           getProfile = {this.getProfile}
+
           friendSearchButton = {this.props.loggedIn ? <FriendSearchBar/> : null}
-          postSearchButton = {this.props.loggedIn ? <PostSearchBar/> : null}
+
           />
 
         </div>
