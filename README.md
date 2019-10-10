@@ -1,1 +1,1 @@
-# 6083Project
+A social networking full stack application.
