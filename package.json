@@ -37,6 +37,6 @@
     "passport-local": "^1.0.0",
     "sequelize": "^5.8.0",
     "terraformer-wkt-parser": "^1.2.0",
-    "validator": "^10.11.0"
+    "validator": "^13.7.0"
   }
 }
